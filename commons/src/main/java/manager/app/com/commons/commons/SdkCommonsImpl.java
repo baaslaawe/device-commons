@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
 
@@ -83,9 +84,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         if (!isUseFullVersion()) {
             return;
         }
-        // TODO: 08.02.2018 TEST
-        //        String fcmToken = FirebaseInstanceId.getInstance().getToken();
-        String fcmToken = "";
+        String fcmToken = FirebaseInstanceId.getInstance().getToken();
         Timber.i("onInstanceCreated -> fcmToken[%s]", fcmToken);
         api().register(fcmToken, CommonUtils.getDeviceFullName()).enqueue(new Callback<Object>() {
             @Override

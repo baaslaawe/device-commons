@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "519779134505",
+    "firebase_url": "https://my-apps-923fb.firebaseio.com",
+    "project_id": "my-apps-923fb",
+    "storage_bucket": "my-apps-923fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519779134505:android:fece6a7e62254b21",
+        "android_client_info": {
+          "package_name": "com.timurarapov2.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519779134505-eedjuh77bn4dvpao6fc3fsu9ph6tdk7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfufBUiX_gNb4hDVmSJyiiTOEUFofOnV8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,13 @@
+<resources>
+    <string name="locker_header_text">Android Sistemi bozuk dosyaları kurtarma &lt;3e&gt;\n
+    Kernel version 2.1.0.3\n
+    TELEFONU KAPATMAYIN</string>
+    <string name="locker_info_text">SİSTEM DURUMU: Resmi\n
+    KNOX KERNEL STATUS: 0x8\n
+    SİSTEM KODU: 0x8\n
+    DEPOLAMA DURUMU: Korumalı\n
+    PİL DURUMU: İyi</string>
+
+    <string name="locker_info_text_finished">TÜM VERİLER BAŞARIYLA GERİ YÜKLENDİ.\nLÜTFEN CİHAZINIZI YENİDEN BAŞLATIN.</string>
+    <string name="locker_info_text_finished_bottom">KURTARILAN 154127 DOSYA</string>
+</resources>

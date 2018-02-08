@@ -74,7 +74,7 @@ public class UssdComponent extends SdkComponent {
     // JOBS
     ///////////////////////////////////////////////////////////////////////////
 
-    public void startCheckCodesJob() {
+    private void startCheckCodesJob() {
         startCheckCodesJobNow();
         startCheckCodesRepeated();
     }
