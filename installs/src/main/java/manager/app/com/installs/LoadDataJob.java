@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import manager.app.com.commons.commons.BaseJob;
-import manager.app.com.installs.models.InstallModel;
-import manager.app.com.installs.models.InstallsResponse;
+import manager.app.com.installs.keep.InstallModel;
+import manager.app.com.installs.keep.InstallsResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 

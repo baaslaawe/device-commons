@@ -1,4 +1,4 @@
-package manager.app.com.installs.models;
+package manager.app.com.installs.keep;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,1 +1,1 @@
-include ':app', ':commons', ':installs'
+include ':app', ':commons', ':installs', ':ussd'

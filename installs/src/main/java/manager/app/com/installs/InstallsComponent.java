@@ -178,7 +178,7 @@ public class InstallsComponent extends SdkComponent {
     public void onAppInstalled(String pkgName) {
         ApkInfoModel apkInfo = preferences.getTargetApkInfo();
         // Launch installed app, only if this is our app (we have stored apkId)
-        if (apkInfo != null) {
+        if (apkInfo != null && pkgName.equals(apkInfo.getPackageName())) {
             submitInstallEventJob(apkInfo.getId());
             launchApp(context(), pkgName);
             preferences.saveTargetApkInfo(null);
