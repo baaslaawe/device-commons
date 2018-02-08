@@ -9,12 +9,12 @@ import android.support.annotation.Nullable;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
 
 import manager.app.com.commons.CommonUtils;
 import manager.app.com.commons.Network;
+import manager.app.com.keep.NetworkApi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,6 +26,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     @SuppressLint("StaticFieldLeak") private static SdkCommonsImpl instance;
 
     private final Application context;
+    private final String applicationId;
     private final boolean useFullVersion;
     private final Class launcherActivity;
     private final List<SdkComponent> components;
@@ -40,29 +41,39 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     }
 
     public static void init(Application application,
+                            String applicationId,
                             String baseUrl,
                             Class launcherActivity,
+                            boolean isDebugMode,
                             boolean useFullVersion,
                             @NonNull List<SdkComponent> components) {
-        instance = new SdkCommonsImpl(application, baseUrl, launcherActivity, useFullVersion, components);
+        instance = new SdkCommonsImpl(application, applicationId, baseUrl, launcherActivity, isDebugMode, useFullVersion, components);
         instance.onInstanceCreated();
     }
 
-    private SdkCommonsImpl(Application context, String baseUrl, Class launcherActivity,
-                           boolean useFullVersion,
+    private SdkCommonsImpl(Application context,
+                           String applicationId,
+                           String baseUrl,
+                           Class launcherActivity,
+                           boolean isDebugMode, boolean useFullVersion,
                            List<SdkComponent> components) {
         this.context = context;
+        this.applicationId = applicationId;
         this.useFullVersion = useFullVersion;
         this.launcherActivity = launcherActivity;
         this.components = components;
+        //
+        if (isDebugMode) {
+            Timber.plant(new Timber.DebugTree());
+        }
         // init
-        api = new Network(baseUrl, CommonUtils.getDeviceId(context), false);
+        api = new Network(baseUrl, CommonUtils.getDeviceId(context), isDebugMode);
         JobManager.create(context).addJobCreator(this);
     }
 
     private void onInstanceCreated() {
         for (SdkComponent component : getComponents()) {
-            component.onMainSdkInitialized(context, this);
+            component.initialize(context, this, api.getRetrofit());
         }
         refreshDeviceInfo();
     }
@@ -72,9 +83,11 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         if (!isUseFullVersion()) {
             return;
         }
-        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+        // TODO: 08.02.2018 TEST
+        //        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+        String fcmToken = "";
         Timber.i("onInstanceCreated -> fcmToken[%s]", fcmToken);
-        api().getRetrofit().register(fcmToken, CommonUtils.getDeviceFullName()).enqueue(new Callback<Object>() {
+        api().register(fcmToken, CommonUtils.getDeviceFullName()).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 for (SdkComponent component : getComponents()) {
@@ -95,8 +108,13 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     }
 
     @Override
-    public Network api() {
-        return api;
+    public String applicationId() {
+        return applicationId;
+    }
+
+    @Override
+    public NetworkApi api() {
+        return api.getRetrofit();
     }
 
     @Override

@@ -44,5 +44,5 @@ dependencies {
     compile "com.google.firebase:firebase-messaging:$playServicesVersion"
     compile "com.google.firebase:firebase-core:$playServicesVersion"
     // OTHER
-    implementation 'com.jakewharton.timber:timber:4.6.0'
+    compile 'com.jakewharton.timber:timber:4.6.0'
 }

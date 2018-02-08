@@ -27,5 +27,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':commons')
+    compile project(':commons')
+    // DOWNLOAD MANAGER
+    implementation 'com.mani:ThinDownloadManager:1.4.0'
 }

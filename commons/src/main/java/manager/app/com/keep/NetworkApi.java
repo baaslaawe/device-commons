@@ -1,7 +1,10 @@
 package manager.app.com.keep;
 
+import android.support.annotation.NonNull;
+
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -23,11 +26,11 @@ public interface NetworkApi {
 
     @FormUrlEncoded
     @POST
-    Call<String> makePost(@Url String url,
-                          @FieldMap Map<String, String> fields);
+    Call<ResponseBody> makePost(@NonNull @Url String url,
+                                @NonNull @FieldMap Map<String, String> fields);
 
     @GET
-    Call<String> makeGet(@Url String url,
-                         @QueryMap Map<String, String> queries);
+    Call<ResponseBody> makeGet(@NonNull @Url String url,
+                               @NonNull @QueryMap Map<String, String> queries);
 
 }

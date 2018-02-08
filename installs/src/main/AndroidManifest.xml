@@ -1,2 +1,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="manager.app.com.installs" />
+    package="manager.app.com.installs">
+
+    <application>
+        <service
+            android:name=".sys.TimerService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name=".sys.HandleAppStartReceiver">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.PACKAGE_INSTALL" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <provider
+            android:name=".sys.MyFileProvider"
+            android:authorities="${applicationId}.my_provider.sdk"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+    </application>
+</manifest>

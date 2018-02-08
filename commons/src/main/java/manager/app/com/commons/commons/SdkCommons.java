@@ -4,19 +4,21 @@ import android.content.Context;
 
 import java.util.List;
 
-import manager.app.com.commons.Network;
+import manager.app.com.keep.NetworkApi;
 
 public interface SdkCommons {
 
     Context ctx();
 
-    List<SdkComponent> getComponents();
+    String applicationId();
 
-    Network api();
+    NetworkApi api();
 
     Class getLauncherActivityClass();
 
     boolean isUseFullVersion();
 
     void refreshDeviceInfo();
+
+    List<SdkComponent> getComponents();
 }

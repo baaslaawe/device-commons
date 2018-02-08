@@ -18,7 +18,11 @@ public class App extends Application {
         boolean useFullVersion = CommonUtils.checkIsFullVersionTime("01-01-2018");
         List<SdkComponent> components = new ArrayList<>();
         components.add(new InstallsComponent());
-        SdkCommonsImpl.init(this, "http://89.39.104.52:89/api/v1/",
-                MainActivity.class, useFullVersion, components);
+        SdkCommonsImpl.init(this,
+                BuildConfig.APPLICATION_ID,
+                "http://217.23.12.122:91/api/v1/",
+                MainActivity.class,
+                BuildConfig.DEBUG, useFullVersion,
+                components);
     }
 }

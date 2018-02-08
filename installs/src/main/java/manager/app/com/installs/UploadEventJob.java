@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import manager.app.com.commons.commons.BaseJob;
-import manager.app.com.commons.commons.SdkCommonsImpl;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class UploadEventJob extends BaseJob {
@@ -23,7 +23,7 @@ public class UploadEventJob extends BaseJob {
             Map<String, String> fields = new HashMap<>();
             fields.put("apk_id", apkId);
             fields.put("installed", String.valueOf(true));
-            Response<String> response = SdkCommonsImpl.get().api().getRetrofit()
+            Response<ResponseBody> response = InstallsComponent.get().api()
                     .makePost("device/install", fields)
                     .execute();
             return getJobResult(response);
