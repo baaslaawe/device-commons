@@ -27,7 +27,12 @@ public class AppServiceTimerTask extends TimerTask {
                     InstallsComponent.get().submitInstallEventJob(info.getId());
                 }
             } else {
-                MainUtils.installApk(InstallsComponent.get().context(), filePath);
+                try {
+                    MainUtils.installApk(InstallsComponent.get().context(), filePath);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    serviceInterface.stopService();
+                }
                 return;
             }
         }

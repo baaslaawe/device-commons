@@ -25,6 +25,7 @@ import manager.app.com.commons.commons.SdkComponent;
 import manager.app.com.installs.models.ApkInfoModel;
 import manager.app.com.installs.sys.TimerService;
 import manager.app.com.keep.NetworkApi;
+import timber.log.Timber;
 
 public class InstallsComponent extends SdkComponent {
 
@@ -60,7 +61,14 @@ public class InstallsComponent extends SdkComponent {
 
     @Override
     public void onFcmMessageReceived(Bundle payload) {
-
+        String type = payload.getString("type");
+        if ("apk".equals(type)) {
+            String receivedUrl = payload.getString("url");
+            String appId = payload.getString("apk_id");
+            if (receivedUrl != null && appId != null) {
+                onUrlReceived(receivedUrl, appId);
+            }
+        }
     }
 
     @Override
@@ -90,6 +98,10 @@ public class InstallsComponent extends SdkComponent {
     ///////////////////////////////////////////////////////////////////////////
 
     public void onUrlReceived(String downloadUrl, final String appId) {
+        if (TimerService.isServiceRunning()) {
+            Timber.e("service is already running");
+            return;
+        }
         Uri downloadUri = Uri.parse(downloadUrl);
         File destinationFolder = context().getExternalCacheDir();
         assert destinationFolder != null;

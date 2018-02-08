@@ -42,10 +42,10 @@ public class MainUtils {
         return 8000;
     }
 
-    public static void installApk(Context context, String apkFilePath) {
+    public static void installApk(Context context, String apkFilePath) throws Exception {
         String pkgName = MainUtils.getPackageName(context, apkFilePath);
         if (pkgName == null) {
-            return;
+            throw new Exception("can't get pkgName");
         }
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW);

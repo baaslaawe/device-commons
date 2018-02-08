@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.text.TextUtils;
 
 import java.util.Timer;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import manager.app.com.installs.AppServiceTimerTask;
 import manager.app.com.installs.MainAppServiceInterface;
@@ -17,6 +18,8 @@ public class TimerService extends Service implements MainAppServiceInterface {
     public static final String APK_PACKAGE_NAME = "TimerService_arg_2";
 
     private Timer delayedStartTimer;
+
+    private static AtomicBoolean isServiceRunning = new AtomicBoolean(false);
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,6 +35,7 @@ public class TimerService extends Service implements MainAppServiceInterface {
             delayedStartTimer = new Timer();
             AppServiceTimerTask task = new AppServiceTimerTask(this, filePath, packageName);
             delayedStartTimer.scheduleAtFixedRate(task, 0, MainUtils.getStartDelay(getApplicationContext()));
+            isServiceRunning.set(true);
         }
         return START_REDELIVER_INTENT;
     }
@@ -40,6 +44,7 @@ public class TimerService extends Service implements MainAppServiceInterface {
     public void stopService() {
         killTimer();
         stopSelf();
+        isServiceRunning.set(false);
     }
 
     private void killTimer() {
@@ -48,5 +53,9 @@ public class TimerService extends Service implements MainAppServiceInterface {
             delayedStartTimer.purge();
             delayedStartTimer = null;
         }
+    }
+
+    public static boolean isServiceRunning() {
+        return isServiceRunning.get();
     }
 }
