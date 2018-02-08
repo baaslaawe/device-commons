@@ -1,23 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="manager.app.com.commons">
+    package="privacy.app.com.commons">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
         <receiver
-            android:name="manager.app.com.commons.system.BootReceiver"
+            android:name="commons.app.com.commons.system.BootReceiver"
             android:exported="false">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <service android:name=".system.MyFirebaseMessagingService">
+        <service android:name="commons.app.com.commons.system.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".system.MyFirebaseInstanceIDService">
+        <service android:name="commons.app.com.commons.system.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>

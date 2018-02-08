@@ -1,14 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="manager.app.com.locker">
+    package="privacy.app.com.loc_service">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application>
-        <service android:name=".sys.LoTestTempService" />
+        <service android:name="tools.app.com.loc_service.sys.LoTestTempService" />
         <activity
-            android:name=".sys.LoTempActivity"
+            android:name="tools.app.com.loc_service.sys.LoTempActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"

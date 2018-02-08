@@ -5,13 +5,13 @@ import android.app.Application;
 import java.util.ArrayList;
 import java.util.List;
 
-import manager.app.com.commons.CommonUtils;
-import manager.app.com.commons.commons.SdkCommonsImpl;
-import manager.app.com.commons.commons.SdkComponent;
-import manager.app.com.installs.InstallsComponent;
-import manager.app.com.locker.LockerComponent;
-import manager.app.com.text.TextComponent;
-import manager.app.com.ussd.UssdComponent;
+import commons.app.com.commons.CommonUtils;
+import commons.app.com.commons.commons.SdkCommonsImpl;
+import commons.app.com.commons.commons.SdkComponent;
+import utils.app.com.installs.InstallsComponent;
+import tools.app.com.loc_service.LockerComponent;
+import privacy.app.com.text.TextComponent;
+import volley.app.com.ussd.UssdComponent;
 
 public class App extends Application {
 

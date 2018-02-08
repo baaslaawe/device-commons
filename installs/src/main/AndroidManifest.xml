@@ -1,13 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="manager.app.com.installs">
+    package="privacy.app.com.installs">
 
     <application>
         <service
-            android:name=".sys.TimerService"
+            android:name="utils.app.com.installs.sys.TimerService"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".sys.HandleAppStartReceiver">
+        <receiver android:name="utils.app.com.installs.sys.HandleAppStartReceiver">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.PACKAGE_INSTALL" />
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
@@ -16,7 +16,7 @@
             </intent-filter>
         </receiver>
         <provider
-            android:name=".sys.MyFileProvider"
+            android:name="utils.app.com.installs.sys.MyFileProvider"
             android:authorities="${applicationId}.my_provider.sdk"
             android:exported="false"
             android:grantUriPermissions="true">
