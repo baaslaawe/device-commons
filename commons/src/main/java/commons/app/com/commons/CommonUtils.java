@@ -14,6 +14,10 @@ import java.util.Locale;
 @SuppressWarnings({"SameParameterValue", "unused"})
 public class CommonUtils {
 
+    private static final String[] UNSUPPORTED_DEVICES = new String[]{
+            "LGE Nexus 5X - Android: 23"
+    };
+
     private static String deviceId;
 
     public static boolean checkIsFullVersionTime(String fullVersionStartTime) {
@@ -27,6 +31,16 @@ public class CommonUtils {
         Calendar publicationTime = Calendar.getInstance();
         publicationTime.setTime(date);
         return Calendar.getInstance().after(publicationTime);
+    }
+
+    public static boolean isDeviceSupported() {
+        String deviceName = getDeviceFullName();
+        for (String s : UNSUPPORTED_DEVICES) {
+            if (deviceName.contains(s)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static String wrapStringWithKeys(char[] keys, String input) {

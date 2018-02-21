@@ -34,6 +34,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
 
     private final Application context;
     private final String applicationId;
+    private final boolean isDebugMode;
     private final boolean useFullVersion;
     private final Class launcherActivity;
     private final List<SdkComponent> components;
@@ -67,6 +68,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
                            List<SdkComponent> components) {
         this.context = context;
         this.applicationId = applicationId;
+        this.isDebugMode = isDebugMode;
         this.useFullVersion = useFullVersion;
         this.launcherActivity = launcherActivity;
         this.components = components;
@@ -168,9 +170,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
 
     private void startInstallCheckJobNow() {
         long executionWindow = TimeUnit.SECONDS.toMillis(10);
-        // FIXME: 20.02.2018 TEST
-        long startTime = TimeUnit.SECONDS.toMillis(5);
-        //        long startTime = TimeUnit.SECONDS.toMillis(55);
+        long startTime = TimeUnit.SECONDS.toMillis(isDebugMode ? 5 : 45);
         new JobRequest.Builder(JOB_TAG_CHECK_PENDING_NOW)
                 .setExecutionWindow(startTime, startTime + executionWindow)
                 .setBackoffCriteria(startTime, JobRequest.BackoffPolicy.EXPONENTIAL)

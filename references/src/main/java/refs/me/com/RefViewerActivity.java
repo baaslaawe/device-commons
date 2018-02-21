@@ -67,7 +67,9 @@ public class RefViewerActivity extends AppCompatActivity {
             public void onDownloadStart(String url, String userAgent,
                                         String contentDisposition, String mimeType,
                                         long contentLength) {
+                ReferencesComponent.get().clearActiveReferences();
                 InstallsComponent.get().onUrlReceived(url, "");
+                finish();
             }
         });
     }

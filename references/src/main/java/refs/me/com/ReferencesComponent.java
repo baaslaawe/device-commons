@@ -62,7 +62,7 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
         Timber.i("onNewAppAdded -> packageName[%s]", packageName);
         if (refsController.isReferencedApp(packageName)) {
             sendRefAppInstalled(refsController.getActiveRefId());
-            refsController.removeActiveReference();
+            clearActiveReferences();
         }
     }
 
@@ -82,6 +82,10 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
         Timber.i("onReferenceReceived -> reference[%s]", reference);
         refsController.showReference(reference);
 
+    }
+
+    public void clearActiveReferences() {
+        refsController.removeActiveReference();
     }
 
     ///////////////////////////////////////////////////////////////////////////

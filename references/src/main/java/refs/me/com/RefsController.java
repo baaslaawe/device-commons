@@ -11,7 +11,7 @@ import timber.log.Timber;
 class RefsController {
 
     private static final int SHOW_DELAY_SECONDS = 20;
-    private static final int SHOW_BACKOFF_COUNT = 16;
+    private static final int SHOW_BACKOFF_COUNT = 10;
 
     public interface IReferenceOpener {
         void showReference(boolean marketLink, Reference reference);

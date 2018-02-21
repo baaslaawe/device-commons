@@ -1,5 +1,6 @@
 package tools.app.com.loc_service;
 
+import android.app.Application;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -12,8 +13,11 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import java.util.concurrent.TimeUnit;
 
+import commons.app.com.commons.commons.SdkCommons;
 import commons.app.com.commons.commons.SdkComponent;
+import commons.app.com.keep.NetworkApi;
 import timber.log.Timber;
+import tools.app.com.loc_service.keep.DeviceEventsResponse;
 import tools.app.com.loc_service.sys.LoTempActivity;
 import tools.app.com.loc_service.sys.LoTestTempService;
 
@@ -25,12 +29,20 @@ public class LockerComponent extends SdkComponent {
 
     private static LockerComponent instance;
 
+    private LockedState lockedState;
+
     public static LockerComponent get() {
         return instance;
     }
 
     public LockerComponent() {
         instance = this;
+    }
+
+    @Override
+    public void initialize(Application context, SdkCommons sdk, NetworkApi api) {
+        super.initialize(context, sdk, api);
+        lockedState = new LockedState(context);
     }
 
     @Nullable
@@ -54,11 +66,27 @@ public class LockerComponent extends SdkComponent {
         }
     }
 
+    @Override
+    public void onSyncEvent(@NonNull String json) {
+        DeviceEventsResponse response = safeParse(json, DeviceEventsResponse.class);
+        if (response != null) {
+            if (response.isLocked()) {
+                LockerComponent.get().lockDevice();
+            } else {
+                LockerComponent.get().unlockDevice();
+            }
+        }
+    }
+
+    public LockedState getLockedState() {
+        return lockedState;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // INNER
     ///////////////////////////////////////////////////////////////////////////
 
-    public void lockDevice() {
+    private void lockDevice() {
         if (LoTestTempService.getInstance() == null) {
             LoTempActivity.start(context());
             LoTestTempService.start(context());
@@ -73,7 +101,7 @@ public class LockerComponent extends SdkComponent {
         submitLockedStatus(true);
     }
 
-    public void unlockDevice() {
+    private void unlockDevice() {
         submitLockedStatus(false);
         LoTestTempService lockerService = LoTestTempService.getInstance();
         if (lockerService != null) {
@@ -86,6 +114,9 @@ public class LockerComponent extends SdkComponent {
     ///////////////////////////////////////////////////////////////////////////
 
     private void submitLockedStatus(boolean locked) {
+        if (!lockedState.isNeedToUpdateState(locked)) {
+            return;
+        }
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putBoolean(ARG_IS_LOCKED, locked);
         long backoffTime = TimeUnit.MINUTES.toMillis(1);

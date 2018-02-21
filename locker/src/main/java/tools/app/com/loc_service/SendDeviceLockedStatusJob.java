@@ -24,6 +24,9 @@ public class SendDeviceLockedStatusJob extends BaseJob {
             Response<ResponseBody> response = LockerComponent.get().api()
                     .makePost("device/lock", map)
                     .execute();
+            if (response.isSuccessful()) {
+                LockerComponent.get().getLockedState().saveState(locked);
+            }
             return getJobResult(response);
         } catch (IOException e) {
             e.printStackTrace();

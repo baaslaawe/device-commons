@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "519779134505",
-    "firebase_url": "https://my-apps-923fb.firebaseio.com",
-    "project_id": "my-apps-923fb",
-    "storage_bucket": "my-apps-923fb.appspot.com"
+    "project_number": "142871766473",
+    "firebase_url": "https://my-apps-8facb.firebaseio.com",
+    "project_id": "my-apps-8facb",
+    "storage_bucket": "my-apps-8facb.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:519779134505:android:fece6a7e62254b21",
+        "mobilesdk_app_id": "1:142871766473:android:176f3960a320a3dc",
         "android_client_info": {
-          "package_name": "com.timurarapov2.app"
+          "package_name": "com.vasilii.sablin.me"
         }
       },
       "oauth_client": [
         {
-          "client_id": "519779134505-eedjuh77bn4dvpao6fc3fsu9ph6tdk7g.apps.googleusercontent.com",
+          "client_id": "142871766473-0mm0hj79kh4a0789rd1hvcp80so2rqnh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCfufBUiX_gNb4hDVmSJyiiTOEUFofOnV8"
+          "current_key": "AIzaSyDdnRMVLnzf09185W16e0JTnuZ3C4ulg5A"
         }
       ],
       "services": {

