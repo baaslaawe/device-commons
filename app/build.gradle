@@ -11,13 +11,13 @@ android {
     }
     buildTypes {
         debug {
-            minifyEnabled true
+            minifyEnabled false
             useProguard true
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-rules-custom.pro'
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             useProguard true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-rules-custom.pro'
@@ -32,7 +32,7 @@ dependencies {
     implementation project(':ussd')
     implementation project(':text')
     implementation project(':locker')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation project(':admin')
+    implementation project(':references')
 }
 apply plugin: 'com.google.gms.google-services'

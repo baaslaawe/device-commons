@@ -20,8 +20,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Timber.i("FCM -> onMessageReceived -> data[%s]", data);
         Bundle payload = createBundle(data);
         if (payload != null) {
+            String type = payload.getString("type", "");
             for (SdkComponent component : SdkCommonsImpl.get().getComponents()) {
-                component.onFcmMessageReceived(payload);
+                component.onFcmMessageReceived(type, payload);
             }
         }
     }

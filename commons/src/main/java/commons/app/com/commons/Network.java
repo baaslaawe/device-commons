@@ -20,10 +20,12 @@ public class Network {
 
     private NetworkApi retrofit;
 
+    private final Gson gson;
     private final String deviceId;
     private final boolean isDebugMode;
 
-    public Network(String baseUrl, String deviceId, boolean isDebugMode) {
+    public Network(String baseUrl, Gson gson, String deviceId, boolean isDebugMode) {
+        this.gson = gson;
         this.deviceId = deviceId;
         this.isDebugMode = isDebugMode;
         this.retrofit = createRetrofit(baseUrl);
@@ -73,7 +75,7 @@ public class Network {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
         return retrofit.create(NetworkApi.class);
     }

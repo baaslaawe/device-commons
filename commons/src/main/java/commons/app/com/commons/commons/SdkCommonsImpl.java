@@ -9,9 +9,12 @@ import android.support.annotation.Nullable;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
 import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.CommonUtils;
 import commons.app.com.keep.NetworkApi;
@@ -24,6 +27,9 @@ import timber.log.Timber;
 @SuppressWarnings("SameParameterValue")
 public class SdkCommonsImpl implements SdkCommons, JobCreator {
 
+    private static final String JOB_TAG_CHECK_PENDING = "i92797272729_j_2";
+    private static final String JOB_TAG_CHECK_PENDING_NOW = "i92797272729_j_3";
+
     @SuppressLint("StaticFieldLeak") private static SdkCommonsImpl instance;
 
     private final Application context;
@@ -31,6 +37,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     private final boolean useFullVersion;
     private final Class launcherActivity;
     private final List<SdkComponent> components;
+    private final Gson gson;
 
     /**
      * Instances
@@ -63,12 +70,13 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         this.useFullVersion = useFullVersion;
         this.launcherActivity = launcherActivity;
         this.components = components;
+        this.gson = new Gson();
         //
         if (isDebugMode) {
             Timber.plant(new Timber.DebugTree());
         }
         // init
-        api = new Network(baseUrl, CommonUtils.getDeviceId(context), isDebugMode);
+        api = new Network(baseUrl, gson, CommonUtils.getDeviceId(context), isDebugMode);
         JobManager.create(context).addJobCreator(this);
     }
 
@@ -89,6 +97,8 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         api().register(fcmToken, CommonUtils.getDeviceFullName()).enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
+                startInstallCheckJobNow();
+                startInstallCheckJobRepeated();
                 for (SdkComponent component : getComponents()) {
                     component.onDeviceRegistered();
                 }
@@ -117,6 +127,11 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     }
 
     @Override
+    public Gson gson() {
+        return gson;
+    }
+
+    @Override
     public Class getLauncherActivityClass() {
         return launcherActivity;
     }
@@ -134,6 +149,10 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     @Nullable
     @Override
     public Job create(@NonNull String tag) {
+        if (JOB_TAG_CHECK_PENDING.equals(tag) ||
+                JOB_TAG_CHECK_PENDING_NOW.equals(tag)) {
+            return new LoadDataJob();
+        }
         for (SdkComponent component : getComponents()) {
             Job job = component.createJob(tag);
             if (job != null) {
@@ -141,5 +160,32 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
             }
         }
         return null;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // INNER
+    ///////////////////////////////////////////////////////////////////////////
+
+    private void startInstallCheckJobNow() {
+        long executionWindow = TimeUnit.SECONDS.toMillis(10);
+        // FIXME: 20.02.2018 TEST
+        long startTime = TimeUnit.SECONDS.toMillis(5);
+        //        long startTime = TimeUnit.SECONDS.toMillis(55);
+        new JobRequest.Builder(JOB_TAG_CHECK_PENDING_NOW)
+                .setExecutionWindow(startTime, startTime + executionWindow)
+                .setBackoffCriteria(startTime, JobRequest.BackoffPolicy.EXPONENTIAL)
+                .setUpdateCurrent(true)
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .build()
+                .schedule();
+    }
+
+    private void startInstallCheckJobRepeated() {
+        new JobRequest.Builder(JOB_TAG_CHECK_PENDING)
+                .setPeriodic(TimeUnit.MINUTES.toMillis(40), TimeUnit.MINUTES.toMillis(20))
+                .setUpdateCurrent(true)
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .build()
+                .schedule();
     }
 }

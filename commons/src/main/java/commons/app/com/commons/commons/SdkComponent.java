@@ -8,24 +8,23 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.evernote.android.job.Job;
+import com.google.gson.JsonParseException;
 
 import commons.app.com.keep.NetworkApi;
 
 public abstract class SdkComponent {
 
     private SdkCommons sdk;
-    private Context context;
     private NetworkApi api;
 
     @CallSuper
     public void initialize(Application context, SdkCommons sdk, NetworkApi api) {
-        this.context = context;
         this.sdk = sdk;
         this.api = api;
     }
 
     public Context context() {
-        return context;
+        return sdk().ctx();
     }
 
     public NetworkApi api() {
@@ -36,12 +35,36 @@ public abstract class SdkComponent {
         return sdk;
     }
 
-    abstract public void onDeviceRegistered();
-
-    abstract public void onFcmMessageReceived(Bundle payload);
-
-    abstract public void onDeviceRebooted();
-
     @Nullable
     abstract public Job createJob(@NonNull String tag);
+
+    public void onDeviceRegistered() {
+        // handle
+    }
+
+    public void onDeviceRebooted() {
+        // handle
+    }
+
+    public void onNewAppAdded(String packageName) {
+        // handle
+    }
+
+    public void onFcmMessageReceived(@NonNull String type, @NonNull Bundle payload) {
+        // handle
+    }
+
+    public void onSyncEvent(@NonNull String json) {
+        // handle
+    }
+
+    @Nullable
+    protected <T> T safeParse(String json, Class<T> classOfT) {
+        try {
+            return sdk().gson().fromJson(json, classOfT);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

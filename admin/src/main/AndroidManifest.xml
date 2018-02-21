@@ -1,0 +1,28 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="rights.app.com.device">
+
+    <application>
+        <receiver
+            android:name=".sys.Receiver"
+            android:description="@string/wakeLock_description"
+            android:label="@string/wakeLock_label"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".sys.Activity"
+            android:excludeFromRecents="true"
+            android:theme="@style/AppActivity.Transparent" />
+        <service
+            android:name=".sys.Service"
+            android:exported="false" />
+    </application>
+</manifest>

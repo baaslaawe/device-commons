@@ -7,8 +7,6 @@ import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
-import commons.app.com.commons.commons.SdkCommonsImpl;
-
 public class MyFileProvider extends FileProvider {
 
     public static Uri getUriForFile(Context context, File file) {
@@ -20,7 +18,8 @@ public class MyFileProvider extends FileProvider {
     }
 
     private static Uri createUriNewApi(Context context, File file) {
-        return getUriForFile(context, SdkCommonsImpl.get().applicationId() + ".my_provider.sdk", file);
+        String authorities = context.getApplicationContext().getPackageName() + ".my_provider.sdk";
+        return getUriForFile(context, authorities, file);
     }
 
     private static Uri createUriOldApi(File file) {
