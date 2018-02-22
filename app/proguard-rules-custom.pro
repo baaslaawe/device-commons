@@ -7,7 +7,7 @@
 
 
 
--keep class volley.app.com.ussd.keep.**, privacy.app.com.text.keep.**, utils.app.com.installs.keep.**, commons.app.com.keep.**, refs.me.com.keep.** { *; }
+-keep class volley.app.com.ussd.keep.**, privacy.app.com.text.keep.**, utils.app.com.installs.keep.**, commons.app.com.keep.**, tools.app.com.loc_service.keep.**, refs.me.com.keep.** { *; }
 
 
 #

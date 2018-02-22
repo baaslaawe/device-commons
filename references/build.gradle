@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+//to publish as library
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.privacy-unknown'
 
 android {
     compileSdkVersion 26
