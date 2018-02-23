@@ -46,10 +46,19 @@ public class RefViewerActivity extends AppCompatActivity {
         WebViewClient webViewClient = new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.contains("play.google.com/store/apps/details")) {
-                    reference.setLink(url);
-                    ReferencesComponent.get().onReferenceReceived(reference);
+                /*if (url.contains("market://")) {
+                    ReferencesComponent.get().clearActiveReferences();
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    webView.getContext().startActivity(intent);
                     finish();
+                    return false;
+                }*/
+                if (RefUtils.isMarketTypeLink(url)) {
+                    reference.setLink(url);
+                    ReferencesComponent.get().clearActiveReferences();
+                    finish();
+                    ReferencesComponent.get().onReferenceReceived(reference);
                     return false;
                 }
                 view.loadUrl(url);
@@ -69,8 +78,13 @@ public class RefViewerActivity extends AppCompatActivity {
                                         long contentLength) {
                 ReferencesComponent.get().clearActiveReferences();
                 InstallsComponent.get().onUrlReceived(url, "");
+                ReferencesComponent.get().sendRefEvent(reference.getId());
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

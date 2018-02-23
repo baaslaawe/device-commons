@@ -23,9 +23,7 @@ public class LoadDataJob extends BaseJob {
             if (response.body() != null) {
                 String json = response.body().string();
                 if (!TextUtils.isEmpty(json)) {
-                    for (SdkComponent component : SdkCommonsImpl.get().getComponents()) {
-                        component.onSyncEvent(json);
-                    }
+                    ((SdkCommonsImpl) SdkCommonsImpl.get()).onSyncEvent(json);
                 }
             }
             return getJobResult(response);

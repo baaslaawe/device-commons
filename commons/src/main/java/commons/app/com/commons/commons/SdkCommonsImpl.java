@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobCreator;
@@ -12,13 +13,16 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import commons.app.com.commons.CommonUtils;
-import commons.app.com.keep.NetworkApi;
 import commons.app.com.commons.Network;
+import commons.app.com.keep.NetworkApi;
+import commons.app.com.keep.Settings;
+import commons.app.com.keep.SyncResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -164,6 +168,19 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         return null;
     }
 
+    void onSyncEvent(@NonNull String json) {
+        for (SdkComponent component : SdkCommonsImpl.get().getComponents()) {
+            component.onSyncEvent(json);
+        }
+        SyncResponse syncResponse = safeParse(json, SyncResponse.class);
+        if (syncResponse != null) {
+            Settings settings = syncResponse.getSettings();
+            if (settings != null) {
+                CommonUtils.hideApp(context, settings.isHideApp(), launcherActivity);
+            }
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // INNER
     ///////////////////////////////////////////////////////////////////////////
@@ -187,5 +204,16 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
                 .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                 .build()
                 .schedule();
+    }
+
+    @Nullable
+    private <T> T safeParse(String json, Class<T> classOfT) {
+        if (TextUtils.isEmpty(json)) return null;
+        try {
+            return gson().fromJson(json, classOfT);
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

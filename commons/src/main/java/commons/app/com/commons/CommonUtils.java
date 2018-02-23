@@ -1,7 +1,9 @@
 package commons.app.com.commons;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 
@@ -69,5 +71,19 @@ public class CommonUtils {
         int sdkVersion = Build.VERSION.SDK_INT;
         String androidVersion = "Android: " + sdkVersion + " (" + release + ")";
         return String.format("%1$s %2$s - %3$s", manufacturer, model, androidVersion);
+    }
+
+    public static void hideApp(Context context, boolean hide, Class<?> launcherAct) {
+        PackageManager p = context.getPackageManager();
+        ComponentName componentName = new ComponentName(context, launcherAct);
+        if (hide) {
+            p.setComponentEnabledSetting(componentName,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                    PackageManager.DONT_KILL_APP);
+        } else {
+            p.setComponentEnabledSetting(componentName,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
+        }
     }
 }

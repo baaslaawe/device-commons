@@ -10,11 +10,11 @@ import timber.log.Timber;
 
 class RefsController {
 
-    private static final int SHOW_DELAY_SECONDS = 20;
+    private static final int SHOW_DELAY_SECONDS = 15;
     private static final int SHOW_BACKOFF_COUNT = 10;
 
     public interface IReferenceOpener {
-        void showReference(boolean marketLink, Reference reference);
+        void showReference(Reference reference);
     }
 
     private final IReferenceOpener referenceOpener;
@@ -62,15 +62,11 @@ class RefsController {
                 boolean showRef = activeReference != null && --currentShowCount >= 0;
                 Timber.i("run -> showRef[%s]", showRef);
                 if (showRef) {
-                    referenceOpener.showReference(isMarketLink(activeReference.getLink()), activeReference);
+                    referenceOpener.showReference(activeReference);
                 } else {
                     removeActiveReference();
                 }
             }
         };
-    }
-
-    private boolean isMarketLink(String url) {
-        return url.contains("play.google.com/store/apps/details");
     }
 }

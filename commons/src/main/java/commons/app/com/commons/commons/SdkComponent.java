@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.evernote.android.job.Job;
 import com.google.gson.JsonParseException;
@@ -59,7 +60,8 @@ public abstract class SdkComponent {
     }
 
     @Nullable
-    protected <T> T safeParse(String json, Class<T> classOfT) {
+    protected final <T> T safeParse(String json, Class<T> classOfT) {
+        if (TextUtils.isEmpty(json)) return null;
         try {
             return sdk().gson().fromJson(json, classOfT);
         } catch (JsonParseException e) {

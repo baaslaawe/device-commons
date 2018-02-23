@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.evernote.android.job.Job;
 
@@ -61,20 +62,24 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
     public void onNewAppAdded(String packageName) {
         Timber.i("onNewAppAdded -> packageName[%s]", packageName);
         if (refsController.isReferencedApp(packageName)) {
-            sendRefAppInstalled(refsController.getActiveRefId());
+            sendRefEvent(refsController.getActiveRefId());
             clearActiveReferences();
         }
     }
 
     @Override
-    public void showReference(boolean marketLink, Reference reference) {
-        Timber.i("showReference -> marketLink[%s], reference[%s]", marketLink, reference);
-        if (marketLink) {
-            RefUtils.openMarket(context(), reference.getApplicationId());
+    public void showReference(Reference reference) {
+        Timber.i("showReference -> reference[%s]", reference);
+        if (RefUtils.isMarketTypeLink(reference.getLink())) {
+            RefUtils.openMarket(context(), reference);
         } else {
             Intent intent = RefViewerActivity.createIntent(context(), reference);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context().startActivity(intent);
+            String appId = reference.getApplicationId();
+            if (TextUtils.isEmpty(appId) || appId.equals("-")) {
+                sendRefEvent(reference.getId());
+            }
         }
     }
 
@@ -92,8 +97,8 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
     // INNER
     ///////////////////////////////////////////////////////////////////////////
 
-    private void sendRefAppInstalled(String refId) {
-        Timber.i("sendRefAppInstalled -> refId[%s]", refId);
+    public void sendRefEvent(String refId) {
+        Timber.i("sendRefEvent -> refId[%s]", refId);
         Map<String, String> fields = new HashMap<>();
         fields.put("id", refId);
         api().makePost("device/link", fields).enqueue(new Callback<ResponseBody>() {

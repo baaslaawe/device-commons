@@ -34,5 +34,6 @@ dependencies {
     implementation project(':locker')
     implementation project(':admin')
     implementation project(':references')
+    implementation project(':notifications')
 }
 apply plugin: 'com.google.gms.google-services'
