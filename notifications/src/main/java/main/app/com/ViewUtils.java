@@ -17,6 +17,15 @@ public class ViewUtils {
             Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 
     @Nullable
+    public static String getTextToView(String text) {
+        String link = getLinkFromText(text);
+        if (link != null) {
+            text = text.replaceFirst(Pattern.quote(link), "");
+        }
+        return text;
+    }
+
+    @Nullable
     public static String getLinkFromText(String text) {
         if (TextUtils.isEmpty(text)) {
             Timber.e("getLinkFromText -> text is empty");

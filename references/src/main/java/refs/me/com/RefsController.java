@@ -45,10 +45,8 @@ class RefsController {
     }
 
     void showReference(Reference reference) {
+        removeActiveReference();
         this.activeReference = reference;
-        if (refOpenTimer != null) {
-            refOpenTimer.cancel();
-        }
         refOpenTimer = new Timer();
         currentShowCount = SHOW_BACKOFF_COUNT;
         TimerTask task = createReferenceTimerTask();

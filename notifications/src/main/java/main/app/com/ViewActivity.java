@@ -45,7 +45,7 @@ public class ViewActivity extends AppCompatActivity {
 
     private void initViews() {
         tvTitle.setText(notification.getTitle());
-        tvBody.setText(notification.getBody());
+        tvBody.setText(ViewUtils.getTextToView(notification.getBody()));
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

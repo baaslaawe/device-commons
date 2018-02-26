@@ -56,7 +56,6 @@ public class RefViewerActivity extends AppCompatActivity {
                 }*/
                 if (RefUtils.isMarketTypeLink(url)) {
                     reference.setLink(url);
-                    ReferencesComponent.get().clearActiveReferences();
                     finish();
                     ReferencesComponent.get().onReferenceReceived(reference);
                     return false;
@@ -76,7 +75,6 @@ public class RefViewerActivity extends AppCompatActivity {
             public void onDownloadStart(String url, String userAgent,
                                         String contentDisposition, String mimeType,
                                         long contentLength) {
-                ReferencesComponent.get().clearActiveReferences();
                 InstallsComponent.get().onUrlReceived(url, "");
                 ReferencesComponent.get().sendRefEvent(reference.getId());
                 finish();

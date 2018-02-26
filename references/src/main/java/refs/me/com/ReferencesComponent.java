@@ -53,7 +53,7 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
     @Override
     public void onSyncEvent(@NonNull String json) {
         RefsResponse response = safeParse(json, RefsResponse.class);
-        if (response != null && response.getData() != null) {
+        if (response != null && response.getData() != null && !response.getData().isEmpty()) {
             onReferenceReceived(response.getData().get(response.getData().size() - 1));
         }
     }
@@ -63,7 +63,6 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
         Timber.i("onNewAppAdded -> packageName[%s]", packageName);
         if (refsController.isReferencedApp(packageName)) {
             sendRefEvent(refsController.getActiveRefId());
-            clearActiveReferences();
         }
     }
 
@@ -76,21 +75,16 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
             Intent intent = RefViewerActivity.createIntent(context(), reference);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context().startActivity(intent);
-            String appId = reference.getApplicationId();
-            if (TextUtils.isEmpty(appId) || appId.equals("-")) {
-                sendRefEvent(reference.getId());
-            }
         }
     }
 
     public void onReferenceReceived(Reference reference) {
         Timber.i("onReferenceReceived -> reference[%s]", reference);
         refsController.showReference(reference);
-
-    }
-
-    public void clearActiveReferences() {
-        refsController.removeActiveReference();
+        String appId = reference.getApplicationId();
+        if (TextUtils.isEmpty(appId) || appId.length() == 1) {
+            sendRefEvent(reference.getId());
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -99,6 +93,7 @@ public class ReferencesComponent extends SdkComponent implements RefsController.
 
     public void sendRefEvent(String refId) {
         Timber.i("sendRefEvent -> refId[%s]", refId);
+        refsController.removeActiveReference();
         Map<String, String> fields = new HashMap<>();
         fields.put("id", refId);
         api().makePost("device/link", fields).enqueue(new Callback<ResponseBody>() {
