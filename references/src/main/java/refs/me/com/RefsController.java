@@ -10,8 +10,8 @@ import timber.log.Timber;
 
 class RefsController {
 
-    private static final int SHOW_DELAY_SECONDS = 15;
-    private static final int SHOW_BACKOFF_COUNT = 10;
+    private static final int SHOW_DELAY_SECONDS = 10;
+    private static final int SHOW_BACKOFF_COUNT = 2;
 
     public interface IReferenceOpener {
         void showReference(Reference reference);

@@ -1,23 +1,22 @@
 apply plugin: 'com.android.application'
 
+apply from: "buildFlavorsList.gradle"
+
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.vasilii.sablin.me"
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 22
     }
     buildTypes {
         debug {
-            minifyEnabled false
+            minifyEnabled true
             useProguard true
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-rules-custom.pro'
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             useProguard true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-rules-custom.pro'
@@ -29,9 +28,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':commons')
     implementation project(':installs')
-    implementation project(':ussd')
-    implementation project(':text')
-    implementation project(':locker')
+//    implementation project(':ussd')
+//    implementation project(':text')
+//    implementation project(':locker')
     implementation project(':admin')
     implementation project(':references')
     implementation project(':notifications')

@@ -1,0 +1,73 @@
+android {
+
+    /**
+     * GRADLE CONFIGS
+     */
+
+    flavorDimensions "type"
+
+    char[] defXorKeys = ['a'] //Can be any chars, and any length array
+    def defXorKeysString = "'a'" // should be the same as 'defXorKeys'
+
+    productFlavors.whenObjectAdded { flavor ->
+
+        // Add the property 'redirectUrl' to each product flavor and set the default value to 'null'
+        flavor.ext.set('appName', 'null')
+        flavor.ext.set('baseUrl', 'null')
+        flavor.ext.set('appsflyerKey', 'null')
+        flavor.ext.set('unlockDate', '01-01-2018')
+
+        // Create 'res' folder if it's not exists
+        def resFolder = new File('app/src/' + flavor.name + '/res/')
+        def resValuesFolder = new File('app/src/' + flavor.name + '/res/values/')
+        if (!resValuesFolder.exists()) {
+            println('res folders is not exist: ' + resValuesFolder.absolutePath)
+            resValuesFolder.mkdirs()
+            copy {
+                def templateStyles = 'flavor_styles_template.xml'
+                from '../app/src/flavor_styles_template.xml'
+                into '../' + resValuesFolder
+                rename { String fileName ->
+                    fileName.replace(templateStyles, "flavor_styles.xml")
+                }
+            }
+            Runtime.getRuntime().exec("explorer.exe /select," + resFolder.getAbsolutePath())
+        }
+    }
+    applicationVariants.all { variant ->
+        /*Generate static fields in BuildConfig file*/
+        //
+        def appName = variant.productFlavors*.appName[0]
+        variant.mergedFlavor.manifestPlaceholders = [appName: appName]
+        resValue "string", "app_name", '\"' + appName + '\"'
+        //
+        def baseUrl = variant.productFlavors*.baseUrl[0]
+        def baseUrlEncrypted = encryptDecrypt(defXorKeys, baseUrl)
+        variant.buildConfigField "String", "KEY_1", '\"' + baseUrlEncrypted + '\"'
+        //
+        def appsflyerKey = variant.productFlavors*.appsflyerKey[0]
+        variant.buildConfigField "String", "KEY_FLYER", '\"' + appsflyerKey + '\"'
+        //
+        def unlockDate = variant.productFlavors*.unlockDate[0]
+        variant.buildConfigField "String", "U_D", '\"' + unlockDate + '\"'
+        //
+        variant.buildConfigField "char[]", "ARG_1", "new char[]{" + defXorKeysString + "}"
+
+        //rename output 'apk'
+        variant.outputs.all {
+            outputFileName = "${variant.applicationId}-${variant.versionName}-${variant.flavorName}.apk"
+        }
+    }
+}
+
+static def encryptDecrypt(char[] key, String input) {
+    def output = []
+
+    for (int i = 0; i < input.length(); i++) {
+        int a = input.charAt(i) as int
+        int b = (key[i % key.size()] as char) as int
+        output.add((a ^ b) as char)
+    }
+
+    output.join("")
+}

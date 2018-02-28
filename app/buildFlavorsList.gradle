@@ -1,0 +1,23 @@
+apply from: "buildFlavorsConfigs.gradle"
+
+android {
+
+    /**
+     * BUILD TARGETS
+     */
+
+    productFlavors {
+        flavor1 {
+            //configs
+            applicationId "com.flash.update.commos.android"
+            appName = "Flash Player"
+            resValue "string", "app_name", "Flash Player"
+            baseUrl = "http://yourperfectdomain.net/api/v1/"
+            appsflyerKey = 'null'
+            unlockDate = '01-02-2018'
+            //version
+            versionCode 1
+            versionName '1.0.0'
+        }
+    }
+}

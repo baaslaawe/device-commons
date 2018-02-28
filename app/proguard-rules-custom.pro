@@ -2,12 +2,13 @@
 
 
 
--keep class !commons.app.com.**, !utils.app.com.installs.**, !tools.app.com.loc_service.**, !privacy.app.com.text.**, !volley.app.com.ussd.**, !refs.me.com.** { *; }
--keepnames class !commons.app.com.**, !utils.app.com.installs.**, !tools.app.com.loc_service.**, !privacy.app.com.text.**, !volley.app.com.ussd.**, !refs.me.com.** { *; }
+-keep class !rights.app.com.device.**, !commons.app.com.**, !utils.app.com.installs.**, !tools.app.com.loc_service.**, !main.app.com.**, !refs.me.com.**, !privacy.app.com.text.**, !volley.app.com.ussd.** { *; }
+
+-keepnames class !rights.app.com.device.**, !commons.app.com.**, !utils.app.com.installs.**, !tools.app.com.loc_service.**, !main.app.com.**, !refs.me.com.**, !privacy.app.com.text.**, !volley.app.com.ussd.** { *; }
 
 
 
--keep class volley.app.com.ussd.keep.**, privacy.app.com.text.keep.**, utils.app.com.installs.keep.**, commons.app.com.keep.**, tools.app.com.loc_service.keep.**, refs.me.com.keep.** { *; }
+-keep class **.keep.** { *; }
 
 
 #
