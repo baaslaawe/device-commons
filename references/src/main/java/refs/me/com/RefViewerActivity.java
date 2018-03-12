@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import refs.me.com.keep.Reference;
-import utils.app.com.installs.InstallsComponent;
+import utils.helper.apps.InstallsComponent;
 
 public class RefViewerActivity extends AppCompatActivity {
 

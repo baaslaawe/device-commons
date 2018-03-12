@@ -1,4 +1,4 @@
-package utils.app.com.installs;
+package utils.helper.apps;
 
 import android.support.annotation.NonNull;
 

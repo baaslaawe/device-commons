@@ -1,15 +1,9 @@
-package utils.app.com.installs;
+package utils.helper.apps;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.provider.Settings;
-
-import java.io.File;
-
-import utils.app.com.installs.sys.MyFileProvider;
 
 public class MainUtils {
 
@@ -40,23 +34,5 @@ public class MainUtils {
         } catch (Settings.SettingNotFoundException ignore) {
         }
         return 8000;
-    }
-
-    public static void installApk(Context context, String apkFilePath) throws Exception {
-        String pkgName = MainUtils.getPackageName(context, apkFilePath);
-        if (pkgName == null) {
-            throw new Exception("can't get pkgName");
-        }
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri uri = MyFileProvider.getUriForFile(context, new File(apkFilePath));
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            context.startActivity(intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

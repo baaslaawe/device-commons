@@ -1,4 +1,4 @@
-package utils.app.com.installs.models;
+package utils.helper.apps.models;
 
 public class ApkInfoModel {
 

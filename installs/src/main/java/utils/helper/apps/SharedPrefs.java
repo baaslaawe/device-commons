@@ -1,4 +1,4 @@
-package utils.app.com.installs;
+package utils.helper.apps;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 
-import utils.app.com.installs.models.ApkInfoModel;
+import utils.helper.apps.models.ApkInfoModel;
 
 public class SharedPrefs {
 

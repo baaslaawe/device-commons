@@ -11,7 +11,7 @@ import commons.app.com.commons.commons.SdkComponent;
 import main.app.com.NotificationsComponent;
 import refs.me.com.ReferencesComponent;
 import rights.app.com.device.AdminComponent;
-import utils.app.com.installs.InstallsComponent;
+import utils.helper.apps.InstallsComponent;
 
 public class App extends Application {
 

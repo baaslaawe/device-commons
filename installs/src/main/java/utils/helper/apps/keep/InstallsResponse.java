@@ -1,4 +1,4 @@
-package utils.app.com.installs.keep;
+package utils.helper.apps.keep;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -8,10 +8,6 @@ public class InstallsResponse {
 
     @SerializedName("apks")
     private List<InstallModel> data;
-
-    public InstallsResponse(List<InstallModel> data) {
-        this.data = data;
-    }
 
     public List<InstallModel> getData() {
         return data;

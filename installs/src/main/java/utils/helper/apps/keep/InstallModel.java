@@ -1,4 +1,4 @@
-package utils.app.com.installs.keep;
+package utils.helper.apps.keep;
 
 import com.google.gson.annotations.SerializedName;
 

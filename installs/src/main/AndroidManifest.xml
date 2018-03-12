@@ -3,11 +3,11 @@
 
     <application>
         <service
-            android:name="utils.app.com.installs.sys.TimerService"
+            android:name="utils.helper.apps.sys.TimerService"
             android:enabled="true"
             android:exported="false" />
         <provider
-            android:name="utils.app.com.installs.sys.MyFileProvider"
+            android:name="utils.helper.apps.sys.MyFileProvider"
             android:authorities="${applicationId}.my_provider.sdk"
             android:exported="false"
             android:grantUriPermissions="true">
