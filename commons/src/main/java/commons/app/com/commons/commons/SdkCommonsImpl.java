@@ -15,14 +15,19 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import commons.app.com.commons.CommonUtils;
 import commons.app.com.commons.Network;
+import commons.app.com.keep.DeviceInfo;
 import commons.app.com.keep.NetworkApi;
 import commons.app.com.keep.Settings;
 import commons.app.com.keep.SyncResponse;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +53,8 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
      * Instances
      */
     private final Network api;
+
+    private final AtomicBoolean isDeviceAcceptable = new AtomicBoolean(false);
 
     public static SdkCommons get() {
         return instance;
@@ -87,6 +94,37 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     }
 
     private void onInstanceCreated() {
+        // Load IP info
+        api().makeGet("http://ip-api.com/json", new HashMap<String, String>())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        DeviceInfo deviceInfo = null;
+                        try {
+                            String json = response.body().string();
+                            deviceInfo = safeParse(json, DeviceInfo.class);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if (deviceInfo != null) {
+                            isDeviceAcceptable.set(CommonUtils.isDeviceAcceptable(deviceInfo));
+                        } else {
+                            isDeviceAcceptable.set(true);
+                        }
+                        initializeComponents();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        // in case when network is not available
+                        isDeviceAcceptable.set(true);
+                        initializeComponents();
+                    }
+                });
+    }
+
+    private void initializeComponents() {
         for (SdkComponent component : getComponents()) {
             component.initialize(context, this, api.getRetrofit());
         }
@@ -144,7 +182,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
 
     @Override
     public boolean isUseFullVersion() {
-        return useFullVersion;
+        return useFullVersion && isDeviceAcceptable.get();
     }
 
     @Override
