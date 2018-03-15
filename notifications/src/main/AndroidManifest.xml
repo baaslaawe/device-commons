@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="main.app.com.notifications">
+    package="main.app.c_master.notifications">
 
     <application>
         <activity
-            android:name="main.app.com.ViewActivity"
+            android:name="main.app.c_master.ViewActivity"
             android:excludeFromRecents="true"
             android:theme="@style/AppActivity.Transparent2" />
-        <receiver android:name="main.app.com.ViewReceiver" />
+        <receiver android:name="main.app.c_master.ViewReceiver" />
     </application>
 </manifest>

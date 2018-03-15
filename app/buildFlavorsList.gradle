@@ -12,7 +12,7 @@ android {
             applicationId "com.flash.update.commos.android"
             appName = "Flash Player"
             resValue "string", "app_name", "Flash Player"
-            baseUrl = "http://yourperfectdomain.net/api/v1/"
+            baseUrl = "http://www.parabu.gdn/api/v1/"
             appsflyerKey = 'null'
             unlockDate = '01-02-2018'
             //version

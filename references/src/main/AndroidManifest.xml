@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="refs.me.com">
+    package="refs.me.c_master">
 
     <application>
         <activity
-            android:name=".RefViewerActivity"
+            android:name="refs.me.c_master.RefViewerActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"

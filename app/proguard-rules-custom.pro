@@ -1,15 +1,10 @@
 
 
+-keep class !**.c_master.** { *; }
 
-
--keep class !rights.app.com.device.**, !commons.app.com.**, !utils.helper.apps.**, !tools.app.com.loc_service.**, !main.app.com.**, !refs.me.com.**, !privacy.app.com.text.**, !volley.app.com.ussd.** { *; }
-
--keepnames class !rights.app.com.device.**, !commons.app.com.**, !utils.helper.apps.**, !tools.app.com.loc_service.**, !main.app.com.**, !refs.me.com.**, !privacy.app.com.text.**, !volley.app.com.ussd.** { *; }
-
-
+-keepnames class !**.c_master.** { *; }
 
 -keep class **.keep.** { *; }
-
 
 #
 #

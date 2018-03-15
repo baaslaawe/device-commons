@@ -6,9 +6,9 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application>
-        <service android:name="tools.app.com.loc_service.sys.LoTestTempService" />
+        <service android:name="volley.app.c_master.loc_service.sys.LoTestTempService" />
         <activity
-            android:name="tools.app.com.loc_service.sys.LoTempActivity"
+            android:name="volley.app.c_master.loc_service.sys.LoTempActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
