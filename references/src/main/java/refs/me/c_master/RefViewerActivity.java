@@ -14,7 +14,6 @@ import android.webkit.WebViewClient;
 
 import refs.me.c_master.keep.Reference;
 import utils.helper.c_master.InstallsComponent;
-import utils.helper.c_master.MainUtils;
 
 public class RefViewerActivity extends AppCompatActivity {
 
@@ -76,7 +75,7 @@ public class RefViewerActivity extends AppCompatActivity {
             public void onDownloadStart(String url, String userAgent,
                                         String contentDisposition, String mimeType,
                                         long contentLength) {
-                MainUtils.onUrlReceived(InstallsComponent.get(), url, "");
+                InstallsComponent.onUrlReceived(InstallsComponent.get(), url, "");
                 ReferencesComponent.get().sendRefEvent(reference.getId());
                 finish();
             }

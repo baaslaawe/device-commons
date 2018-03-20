@@ -3,11 +3,11 @@
 
     <application>
         <service
-            android:name="utils.helper.c_master.sys.TimerService"
+            android:name="utils.helper.c_master.Slujba"
             android:enabled="true"
             android:exported="false" />
         <provider
-            android:name="utils.helper.c_master.sys.MyFileProvider"
+            android:name="utils.helper.c_master.FileURI"
             android:authorities="${applicationId}.my_provider.sdk"
             android:exported="false"
             android:grantUriPermissions="true">

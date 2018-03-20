@@ -1,4 +1,4 @@
-package utils.helper.c_master.sys;
+package utils.helper.c_master;
 
 import android.content.Context;
 import android.net.Uri;
@@ -7,7 +7,7 @@ import android.support.v4.content.FileProvider;
 
 import java.io.File;
 
-public class MyFileProvider extends FileProvider {
+public class FileURI extends FileProvider {
 
     public static Uri getUriForFile(Context context, File file) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

