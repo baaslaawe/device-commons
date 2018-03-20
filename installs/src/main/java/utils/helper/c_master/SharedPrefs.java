@@ -7,8 +7,6 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 
-import utils.helper.c_master.models.ApkInfoModel;
-
 public class SharedPrefs {
 
     private static final String TARGET_KEY = "target_key";

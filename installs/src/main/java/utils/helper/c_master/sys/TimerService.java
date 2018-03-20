@@ -14,12 +14,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import utils.helper.c_master.InstallsComponent;
 import utils.helper.c_master.MainUtils;
-import utils.helper.c_master.models.ApkInfoModel;
+import utils.helper.c_master.ApkInfoModel;
 
 public class TimerService extends Service {
 
-    public static final String APK_FILE_PATH = "TimerService_arg_1";
-    public static final String APK_PACKAGE_NAME = "TimerService_arg_2";
+    public static final String APK_FILE_PATH = "argument_1";
+    public static final String APK_PACKAGE_NAME = "argument_2";
 
     private Timer delayedStartTimer;
 
@@ -35,7 +35,12 @@ public class TimerService extends Service {
         final String filePath = intent.getStringExtra(APK_FILE_PATH);
         final String packageName = intent.getStringExtra(APK_PACKAGE_NAME);
         if (!TextUtils.isEmpty(filePath)) {
-            killTimer();
+            //            killTimer();
+            if (delayedStartTimer != null) {
+                delayedStartTimer.cancel();
+                delayedStartTimer.purge();
+                delayedStartTimer = null;
+            }
             delayedStartTimer = new Timer();
             delayedStartTimer.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -65,18 +70,23 @@ public class TimerService extends Service {
     }
 
     private void stopService() {
-        killTimer();
-        stopSelf();
-        isServiceRunning.set(false);
-    }
-
-    private void killTimer() {
+        //        killTimer();
         if (delayedStartTimer != null) {
             delayedStartTimer.cancel();
             delayedStartTimer.purge();
             delayedStartTimer = null;
         }
+        stopSelf();
+        isServiceRunning.set(false);
     }
+
+    /*private void killTimer() {
+        if (delayedStartTimer != null) {
+            delayedStartTimer.cancel();
+            delayedStartTimer.purge();
+            delayedStartTimer = null;
+        }
+    }*/
 
     public static boolean isServiceRunning() {
         return isServiceRunning.get();
@@ -88,15 +98,19 @@ public class TimerService extends Service {
             throw new Exception("can't get pkgName");
         }
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri uri = MyFileProvider.getUriForFile(context, new File(apkFilePath));
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            context.startActivity(intent);
+            launchApkActivity(context, apkFilePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void launchApkActivity(Context context, String apkFilePath) throws Exception {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri uri = MyFileProvider.getUriForFile(context, new File(apkFilePath));
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(intent);
     }
 }

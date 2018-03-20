@@ -1,4 +1,4 @@
-package utils.helper.c_master.models;
+package utils.helper.c_master;
 
 public class ApkInfoModel {
 
