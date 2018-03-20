@@ -1,4 +1,4 @@
-package main_commons.app.c_master.commons;
+package main_commons.app.c_master;
 
 import com.google.gson.Gson;
 

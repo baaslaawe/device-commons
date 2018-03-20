@@ -1,11 +1,11 @@
-package main_commons.app.c_master.commons.system;
+package main_commons.app.c_master;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import main_commons.app.c_master.commons.commons.SdkComponent;
-import main_commons.app.c_master.commons.commons.SdkCommonsImpl;
+import main_commons.app.c_master.SdkComponent;
+import main_commons.app.c_master.SdkCommonsImpl;
 
 public class BootReceiver extends BroadcastReceiver {
 

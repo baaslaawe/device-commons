@@ -1,4 +1,4 @@
-package main_commons.app.c_master.commons;
+package main_commons.app.c_master;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import main_commons.app.c_master.commons.commons.BaseJob;
+import main_commons.app.c_master.BaseJob;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 

@@ -1,4 +1,4 @@
-package main_commons.app.c_master.commons.commons;
+package main_commons.app.c_master;
 
 import android.support.annotation.NonNull;
 

@@ -1,4 +1,4 @@
-package utils.helper.c_master;
+package ustanovki.com.c_master;
 
 import android.app.Application;
 import android.content.ActivityNotFoundException;
@@ -32,14 +32,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import main_commons.app.c_master.commons.commons.BaseJob;
-import main_commons.app.c_master.commons.commons.SdkCommons;
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.BaseJob;
+import main_commons.app.c_master.SdkCommons;
+import main_commons.app.c_master.SdkComponent;
 import main_commons.app.c_master.keep.NetworkApi;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import timber.log.Timber;
-import utils.helper.c_master.keep.ApiInstallsList;
+import ustanovki.com.c_master.keep.ApiInstallsList;
 
 @SuppressWarnings("WeakerAccess")
 public class InstallsComponent extends SdkComponent {

@@ -1,4 +1,4 @@
-package utils.helper.c_master.keep;
+package ustanovki.com.c_master.keep;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -9,8 +9,8 @@ import android.support.annotation.Nullable;
 
 import com.evernote.android.job.Job;
 
-import main_commons.app.c_master.commons.commons.SdkCommons;
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.SdkCommons;
+import main_commons.app.c_master.SdkComponent;
 import main_commons.app.c_master.keep.NetworkApi;
 
 @SuppressWarnings("WeakerAccess")

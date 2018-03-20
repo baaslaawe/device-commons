@@ -1,12 +1,12 @@
-package main_commons.app.c_master.commons.system;
+package main_commons.app.c_master;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import main_commons.app.c_master.commons.commons.SdkCommonsImpl;
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.SdkCommonsImpl;
+import main_commons.app.c_master.SdkComponent;
 
 public class HandleAppStartReceiver extends BroadcastReceiver {
 

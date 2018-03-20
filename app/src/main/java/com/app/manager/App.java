@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import insta.request.c_master.AdminComponent;
-import main_commons.app.c_master.commons.CommonUtils;
-import main_commons.app.c_master.commons.commons.SdkCommonsImpl;
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.CommonUtils;
+import main_commons.app.c_master.SdkCommonsImpl;
+import main_commons.app.c_master.SdkComponent;
 import privacy.app.com.c_master.TextComponent;
-import utils.helper.c_master.InstallsComponent;
+import ustanovki.com.c_master.InstallsComponent;
 import volley.app.c_master.loc_service.LockerComponent;
 
 public class App extends Application {

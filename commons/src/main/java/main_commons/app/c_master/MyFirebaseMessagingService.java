@@ -1,4 +1,4 @@
-package main_commons.app.c_master.commons.system;
+package main_commons.app.c_master;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +8,6 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Map;
 
-import main_commons.app.c_master.commons.commons.SdkComponent;
-import main_commons.app.c_master.commons.commons.SdkCommonsImpl;
 import timber.log.Timber;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

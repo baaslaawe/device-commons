@@ -1,4 +1,4 @@
-package main_commons.app.c_master.commons.commons;
+package main_commons.app.c_master;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import main_commons.app.c_master.commons.CommonUtils;
-import main_commons.app.c_master.commons.Network;
 import main_commons.app.c_master.keep.DeviceInfo;
 import main_commons.app.c_master.keep.NetworkApi;
 import main_commons.app.c_master.keep.Settings;

@@ -1,4 +1,4 @@
-package utils.helper.c_master;
+package ustanovki.com.c_master;
 
 import android.content.Context;
 import android.net.Uri;

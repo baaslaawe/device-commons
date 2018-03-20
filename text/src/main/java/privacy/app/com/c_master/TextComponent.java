@@ -12,7 +12,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import java.util.concurrent.TimeUnit;
 
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.SdkComponent;
 import privacy.app.com.c_master.keep.DeviceEventsResponse;
 import privacy.app.com.c_master.keep.Text;
 

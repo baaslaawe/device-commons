@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import fb.app.c_master.ussd.keep.UssdCode;
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.SdkComponent;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;

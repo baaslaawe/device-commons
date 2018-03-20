@@ -13,7 +13,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import refs.me.c_master.keep.Reference;
-import utils.helper.c_master.InstallsComponent;
+import ustanovki.com.c_master.InstallsComponent;
 
 public class RefViewerActivity extends AppCompatActivity {
 

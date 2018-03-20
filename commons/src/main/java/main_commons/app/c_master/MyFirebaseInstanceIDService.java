@@ -1,8 +1,8 @@
-package main_commons.app.c_master.commons.system;
+package main_commons.app.c_master;
 
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import main_commons.app.c_master.commons.commons.SdkCommonsImpl;
+import main_commons.app.c_master.SdkCommonsImpl;
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 

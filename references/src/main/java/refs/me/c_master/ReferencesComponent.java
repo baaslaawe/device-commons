@@ -11,7 +11,7 @@ import com.evernote.android.job.Job;
 import java.util.HashMap;
 import java.util.Map;
 
-import main_commons.app.c_master.commons.commons.SdkComponent;
+import main_commons.app.c_master.SdkComponent;
 import okhttp3.ResponseBody;
 import refs.me.c_master.keep.Reference;
 import refs.me.c_master.keep.RefsResponse;
