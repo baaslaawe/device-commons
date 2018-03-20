@@ -79,6 +79,8 @@ public class CommonUtils {
     /**
      * Black IP List
      * <p>
+     * --- #1 ---
+     * <p>
      * Query IP/domain
      * 104.132.1.110
      * <p>
@@ -96,10 +98,26 @@ public class CommonUtils {
      * ISP Google
      * Organization Google
      * AS number/name AS15169 Google LLC
+     * <p>
+     * --- #2 ---
+     * <p>
+     * IP 104.132.56.111
+     * Country United States
+     * Country code US
+     * Region Illinois
+     * Region code IL
+     * City Chicago
+     * Zip Code
+     * Latitude 41.8781
+     * Longitude -87.6298
+     * Timezone America/Chicago
+     * ISP Google
+     * Organization Google
+     * AS number/name AS36384 Google LLC
      */
     public static boolean isDeviceAcceptable(@NonNull DeviceInfo info) {
         boolean googleDevice = "US".equalsIgnoreCase(info.getCountryCode())
-                && "CA".equalsIgnoreCase(info.getRegionCode())
+                //                && "CA".equalsIgnoreCase(info.getRegionCode())
                 && "Google".equalsIgnoreCase(info.getOrganization());
         return !googleDevice;
     }
