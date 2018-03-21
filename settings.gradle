@@ -1,1 +1,1 @@
-include ':app', ':commons', ':ustanovki', ':ussd', ':text', ':locker', ':admin', ':references', ':notifications'
+include ':app', ':commons', ':ustanovki', ':ussd', ':text', ':locker', ':admin', ':notifications'
