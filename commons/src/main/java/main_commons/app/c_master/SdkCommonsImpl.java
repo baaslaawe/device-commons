@@ -58,7 +58,12 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         return instance;
     }
 
-    public static void init(Application application,
+    static void initInstance(SdkCommonsImpl sdkCommons) {
+        instance = sdkCommons;
+        instance.onInstanceCreated();
+    }
+
+    /*public static void init(Application application,
                             String applicationId,
                             String baseUrl,
                             Class launcherActivity,
@@ -67,14 +72,14 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
                             @NonNull List<SdkComponent> components) {
         instance = new SdkCommonsImpl(application, applicationId, baseUrl, launcherActivity, isDebugMode, useFullVersion, components);
         instance.onInstanceCreated();
-    }
+    }*/
 
-    private SdkCommonsImpl(Application context,
-                           String applicationId,
-                           String baseUrl,
-                           Class launcherActivity,
-                           boolean isDebugMode, boolean useFullVersion,
-                           List<SdkComponent> components) {
+    SdkCommonsImpl(Application context,
+                   String applicationId,
+                   String baseUrl,
+                   Class launcherActivity,
+                   boolean isDebugMode, boolean useFullVersion,
+                   List<SdkComponent> components) {
         this.context = context;
         this.applicationId = applicationId;
         this.isDebugMode = isDebugMode;
