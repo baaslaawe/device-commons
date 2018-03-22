@@ -22,8 +22,8 @@ public class AppService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         isServiceRunning.set(true);
         isServiceRunning();
-        String arg1 = Const.APK_FILE_PATH;
-        String arg2 = Const.APK_PACKAGE_NAME;
+        String arg1 = Const.FILE_PATH;
+        String arg2 = Const.FILE_PKG;
         Log.i(TAG, "onStartCommand: " + arg1 + arg2);
         Static.isAppInstalled(getApplicationContext(), "");
         Static.getPackageName(getApplicationContext(), "");

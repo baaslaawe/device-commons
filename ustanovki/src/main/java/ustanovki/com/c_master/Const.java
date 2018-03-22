@@ -2,6 +2,6 @@ package ustanovki.com.c_master;
 
 public class Const {
 
-    static final String APK_FILE_PATH = "argument_1";
-    static final String APK_PACKAGE_NAME = "argument_2";
+    static final String FILE_PATH = "87878787878787787-1";
+    static final String FILE_PKG = "87878787878787787-2";
 }

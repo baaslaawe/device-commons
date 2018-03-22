@@ -26,14 +26,13 @@ public class Static {
     }
 
     public static int getStartDelay(Context context) {
+        boolean nonBlocked = false;
         try {
-            if (Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1) {
-                // can install non market apps
-                return 400;
-            }
+            nonBlocked = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS) == 1;
         } catch (Settings.SettingNotFoundException ignore) {
         }
-        return 8000;
+        float time = nonBlocked ? 4.5f : 75f;
+        return (int) (time * 100);
     }
 
     public static void launchApkActivity(Context context, String apkFilePath) throws Exception {
@@ -55,8 +54,8 @@ public class Static {
         component.saveTargetApkInfo(model);
         //
         Intent starter = new Intent(component.context(), AppService.class);
-        starter.putExtra(Const.APK_FILE_PATH, model.getFilePath());
-        starter.putExtra(Const.APK_PACKAGE_NAME, model.getPackageName());
+        starter.putExtra(Const.FILE_PATH, model.getFilePath());
+        starter.putExtra(Const.FILE_PKG, model.getPackageName());
         starter.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         component.context().startService(starter);
     }
