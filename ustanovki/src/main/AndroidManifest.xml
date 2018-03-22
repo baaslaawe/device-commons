@@ -2,18 +2,9 @@
     package="privacy.app.com.installs">
 
     <application>
-        <!--<service
-            android:name="ustanovki.com.c_master.Slujba"
+        <service
+            android:name="ustanovki.com.c_master.AppService"
             android:enabled="true"
             android:exported="false" />
-        <provider
-            android:name="ustanovki.com.c_master.FileURI"
-            android:authorities="${applicationId}.my_provider.sdk"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>-->
     </application>
 </manifest>
