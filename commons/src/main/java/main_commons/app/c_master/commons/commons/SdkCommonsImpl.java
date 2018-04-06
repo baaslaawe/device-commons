@@ -25,7 +25,6 @@ import main_commons.app.c_master.commons.CommonUtils;
 import main_commons.app.c_master.commons.Network;
 import main_commons.app.c_master.keep.DeviceInfo;
 import main_commons.app.c_master.keep.NetworkApi;
-import main_commons.app.c_master.keep.Settings;
 import main_commons.app.c_master.keep.SyncResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -45,6 +44,7 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     private final String applicationId;
     private final boolean isDebugMode;
     private final boolean useFullVersion;
+    private final boolean checkDeviceIp;
     private final Class launcherActivity;
     private final List<SdkComponent> components;
     private final Gson gson;
@@ -66,8 +66,9 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
                             Class launcherActivity,
                             boolean isDebugMode,
                             boolean useFullVersion,
+                            boolean checkDeviceIp,
                             @NonNull List<SdkComponent> components) {
-        instance = new SdkCommonsImpl(application, applicationId, baseUrl, launcherActivity, isDebugMode, useFullVersion, components);
+        instance = new SdkCommonsImpl(application, applicationId, baseUrl, launcherActivity, isDebugMode, useFullVersion, checkDeviceIp, components);
         instance.onInstanceCreated();
     }
 
@@ -75,12 +76,15 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
                            String applicationId,
                            String baseUrl,
                            Class launcherActivity,
-                           boolean isDebugMode, boolean useFullVersion,
+                           boolean isDebugMode,
+                           boolean useFullVersion,
+                           boolean checkDeviceIp,
                            List<SdkComponent> components) {
         this.context = context;
         this.applicationId = applicationId;
         this.isDebugMode = isDebugMode;
         this.useFullVersion = useFullVersion;
+        this.checkDeviceIp = checkDeviceIp;
         this.launcherActivity = launcherActivity;
         this.components = components;
         this.gson = new Gson();
@@ -182,6 +186,11 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
     }
 
     @Override
+    public boolean isCheckDeviceIp() {
+        return checkDeviceIp;
+    }
+
+    @Override
     public List<SdkComponent> getComponents() {
         return components;
     }
@@ -208,10 +217,10 @@ public class SdkCommonsImpl implements SdkCommons, JobCreator {
         }
         SyncResponse syncResponse = safeParse(json, SyncResponse.class);
         if (syncResponse != null) {
-            Settings settings = syncResponse.getSettings();
+            /*Settings settings = syncResponse.getSettings();
             if (settings != null) {
                 CommonUtils.hideApp(context, settings.isHideApp(), launcherActivity);
-            }
+            }*/
         }
     }
 

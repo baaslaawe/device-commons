@@ -22,6 +22,8 @@ public interface SdkCommons {
 
     boolean isUseFullVersion();
 
+    boolean isCheckDeviceIp();
+
     void refreshDeviceInfo();
 
     List<SdkComponent> getComponents();

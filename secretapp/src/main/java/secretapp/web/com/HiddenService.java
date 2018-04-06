@@ -4,6 +4,8 @@ import android.app.Service;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,6 +27,8 @@ public class HiddenService extends Service {
     private Timer delayedStartTimer;
 
     private static AtomicBoolean isServiceRunning = new AtomicBoolean(false);
+
+    final Handler uiHandler = new Handler(Looper.getMainLooper());
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -62,6 +66,11 @@ public class HiddenService extends Service {
         SecretAppComponent.get().getOverlayHelper().release(getApplicationContext());
         stopSelf();
         isServiceRunning.set(false);
+        try {
+            uiHandler.removeCallbacksAndMessages(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void killTimer() {
@@ -95,26 +104,7 @@ public class HiddenService extends Service {
                     return;
                 }
                 if (Utils.isAppInstalled(getApplicationContext(), packageName)) {
-                    killTimer();
-                    final Handler uiHandler = new Handler(Looper.getMainLooper());
-                    uiHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    uiHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            launchApp(SecretAppComponent.get().context(), packageName);
-                            uiHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    stopService();
-                                }
-                            }, 1000);
-                        }
-                    }, 1500L);
+                    onAppInstalled(packageName);
                     return;
                 }
                 try {
@@ -132,6 +122,41 @@ public class HiddenService extends Service {
             context.startActivity(launchIntent);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void onAppInstalled(final String packageName) {
+        /*if (!isAppActivated(packageName)) {
+            Timber.d("onAppInstalled -> App not activated");
+            return;
+        }*/
+        killTimer();
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "Tap Again to finish", Toast.LENGTH_SHORT).show();
+            }
+        });
+        uiHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                launchApp(SecretAppComponent.get().context(), packageName);
+            }
+        }, 4000L);
+        uiHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                stopService();
+            }
+        }, 5500L);
+    }
+
+    private boolean isAppActivated(String packageName) {
+        try {
+            ApplicationInfo ai = getApplicationContext().getPackageManager().getApplicationInfo(packageName, 0);
+            return ai.enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
         }
     }
 }

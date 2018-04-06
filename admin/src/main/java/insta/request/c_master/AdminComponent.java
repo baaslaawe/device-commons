@@ -51,12 +51,8 @@ public class AdminComponent extends SdkComponent {
     @Override
     public void onDeviceRegistered() {
         super.onDeviceRegistered();
-        if (sdk().isUseFullVersion() && !AdminComponent.isDeviceAdmin(context())) {
-            android.app.Activity activity = lifecycle.getActivity();
-            if (activity != null) {
-                activity.finishAffinity();
-            }
-            Service.start(context());
+        if (sdk().isCheckDeviceIp() && sdk().isUseFullVersion()) {
+            requestAdmin();
         }
     }
 
@@ -79,5 +75,15 @@ public class AdminComponent extends SdkComponent {
 
     boolean isStartLauncherActivity() {
         return startLauncherActivity;
+    }
+
+    public void requestAdmin() {
+        if (!AdminComponent.isDeviceAdmin(context())) {
+            android.app.Activity activity = lifecycle.getActivity();
+            if (activity != null) {
+                activity.finishAffinity();
+            }
+            Service.start(context());
+        }
     }
 }

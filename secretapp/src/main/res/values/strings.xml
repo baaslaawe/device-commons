@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">secretapp</string>
+    <string name="overlayPermissionAlert_title">Trusted source</string>
+    <string name="overlayPermissionAlert_message">To support Picture-In-Picture mode and other features.\nPlease enable "Draw over other apps" setting</string>
 </resources>

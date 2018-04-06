@@ -104,6 +104,7 @@ public class OverlayHelper {
     }
 
     private WindowManager.LayoutParams createLayoutParamsBottom(Context context) {
+
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 SizeUtils.getBottomBlockWidth(context),
                 SizeUtils.getBottomBlockHeight(context),

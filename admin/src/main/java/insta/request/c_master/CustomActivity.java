@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import insta.request.c_master.device.R;
 
-public class Activity extends AppCompatActivity {
+public class CustomActivity extends AppCompatActivity {
 
     public static final int RQ_CODE = 1001;
 
@@ -17,7 +17,7 @@ public class Activity extends AppCompatActivity {
 
     public static void start(Context context) {
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setComponent(new ComponentName(context, Activity.class));
+        intent.setComponent(new ComponentName(context, CustomActivity.class));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         intent.addCategory(Intent.CATEGORY_HOME);

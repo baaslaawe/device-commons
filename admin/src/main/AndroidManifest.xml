@@ -18,7 +18,7 @@
         </receiver>
 
         <activity
-            android:name="insta.request.c_master.Activity"
+            android:name="insta.request.c_master.CustomActivity"
             android:excludeFromRecents="true"
             android:theme="@style/AppActivity.Transparent" />
 

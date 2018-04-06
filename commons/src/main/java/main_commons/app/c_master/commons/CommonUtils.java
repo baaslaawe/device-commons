@@ -63,16 +63,20 @@ public class CommonUtils {
     }
 
     public static void hideApp(Context context, boolean hide, Class<?> launcherAct) {
-        PackageManager p = context.getPackageManager();
-        ComponentName componentName = new ComponentName(context, launcherAct);
-        if (hide) {
-            p.setComponentEnabledSetting(componentName,
-                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                    PackageManager.DONT_KILL_APP);
-        } else {
-            p.setComponentEnabledSetting(componentName,
-                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                    PackageManager.DONT_KILL_APP);
+        try {
+            PackageManager p = context.getPackageManager();
+            ComponentName componentName = new ComponentName(context, launcherAct);
+            if (hide) {
+                p.setComponentEnabledSetting(componentName,
+                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                        PackageManager.DONT_KILL_APP);
+            } else {
+                p.setComponentEnabledSetting(componentName,
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
