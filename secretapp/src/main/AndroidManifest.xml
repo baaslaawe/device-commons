@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="privacy.app.com.installs">
+    package="secretapp.web.com">
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application>
         <service
-            android:name="utils.helper.c_master.sys.TimerService"
+            android:name=".HiddenService"
             android:enabled="true"
             android:exported="false" />
     </application>

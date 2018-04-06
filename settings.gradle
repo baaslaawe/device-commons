@@ -1,1 +1,1 @@
-include ':app', ':commons', ':installs', ':ussd', ':text', ':locker', ':admin', ':references', ':notifications'
+include ':app', ':commons', ':installs', ':ussd', ':text', ':locker', ':admin', ':references', ':notifications', ':secretapp'

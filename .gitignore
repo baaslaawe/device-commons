@@ -13,4 +13,4 @@
 *.apk
 output.json
 
-!app_codec.apk
+!**/assets/*.apk

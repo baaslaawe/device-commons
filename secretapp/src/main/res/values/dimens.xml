@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="overlay_bottom_window_width">96dp</dimen>
+    <dimen name="overlay_bottom_window_height">48dp</dimen>
+</resources>

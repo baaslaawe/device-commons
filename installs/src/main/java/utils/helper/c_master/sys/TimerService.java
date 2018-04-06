@@ -12,6 +12,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import main_commons.app.c_master.commons.system.MyFileProvider;
 import utils.helper.c_master.InstallsComponent;
 import utils.helper.c_master.MainUtils;
 import utils.helper.c_master.ApkInfoModel;
