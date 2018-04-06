@@ -19,7 +19,11 @@ public class HelperInstance {
     }
 
     public void runAction(Context context) {
-        Activity.start(context);
+        try {
+            Activity.start(context);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void delay() {

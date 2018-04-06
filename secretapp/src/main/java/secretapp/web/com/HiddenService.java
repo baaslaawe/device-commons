@@ -96,12 +96,18 @@ public class HiddenService extends Service {
                 }
                 if (Utils.isAppInstalled(getApplicationContext(), packageName)) {
                     killTimer();
-                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    final Handler uiHandler = new Handler(Looper.getMainLooper());
+                    uiHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    uiHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             launchApp(SecretAppComponent.get().context(), packageName);
-                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            uiHandler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     stopService();

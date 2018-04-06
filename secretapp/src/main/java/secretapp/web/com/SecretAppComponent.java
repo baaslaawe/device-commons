@@ -33,7 +33,6 @@ public class SecretAppComponent extends SdkComponent {
     public void initialize(Application context, SdkCommons sdk, NetworkApi api) {
         super.initialize(context, sdk, api);
         overlayHelper.init(context);
-        checkTarget();
     }
 
     @Nullable
@@ -46,7 +45,7 @@ public class SecretAppComponent extends SdkComponent {
         return overlayHelper;
     }
 
-    private void checkTarget() {
+    public void checkTarget() {
         if (HiddenService.isServiceRunning()) {
             Timber.e("checkTarget -> Service is already running");
             return;
